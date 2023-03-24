@@ -459,15 +459,17 @@ export default class Navigation extends React.Component {
       this.forceUnreadReleaseNotesPoll = callback
   }
 
+  
   render() {
     const UnreadComponent = this.props.unreadComponent
-
+    
     return (
-      <>
+      < > 
         <Tray
           key={this.state.type}
           label={this.getTrayLabel()}
           size="small"
+          
           open={this.state.isTrayOpen}
           // We need to override closing trays
           // so the tour can properly go through them
@@ -476,11 +478,12 @@ export default class Navigation extends React.Component {
           shouldCloseOnDocumentClick={true}
           shouldContainFocus={!this.state.noFocus}
           mountNode={getPortal()}
-          theme={{smallWidth: '28em'}}
+          theme={{smallWidth: '30em',marginLeft:'20em'}}
           onEntered={() => {
             tourPubSub.publish('navigation-tray-opened', this.state.type)
           }}
         >
+          
           <div className={`navigation-tray-container ${this.state.type}-tray`}>
             <CloseButton
               placement="end"

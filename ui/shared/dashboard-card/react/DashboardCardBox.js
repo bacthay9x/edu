@@ -16,15 +16,15 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {useScope as useI18nScope} from '@canvas/i18n'
+import { useScope as useI18nScope } from '@canvas/i18n'
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Text} from '@instructure/ui-text'
+import { Text } from '@instructure/ui-text'
 
 import DraggableDashboardCard from './DraggableDashboardCard'
 import DashboardCardBackgroundStore from './DashboardCardBackgroundStore'
 import MovementUtils from './MovementUtils'
-import {showNoFavoritesAlert} from './ConfirmUnfavoriteCourseModal'
+import { showNoFavoritesAlert } from './ConfirmUnfavoriteCourseModal'
 
 const I18n = useI18nScope('dashcards')
 
@@ -102,7 +102,7 @@ export default class DashboardCardBox extends React.Component {
     let newCards = this.state.courseCards.slice()
     newCards.splice(atIndex, 0, newCards.splice(cardIndex, 1)[0])
     newCards = newCards.map((card, index) => {
-      const newCard = {...card}
+      const newCard = { ...card }
       newCard.position = index
       return newCard
     })
@@ -178,7 +178,7 @@ export default class DashboardCardBox extends React.Component {
 
   renderSplitDashboard = () => {
     const HeadingElement = this.props.headingLevel
-    const {courseCards} = this.state
+    const { courseCards } = this.state
     const publishedCourses = courseCards
       .filter(card => card.published)
       .map(card => this.renderCard(card))
@@ -193,9 +193,9 @@ export default class DashboardCardBox extends React.Component {
       <div key={this.state.observedUserId} className="unpublished_courses_redesign">
         <div className="ic-DashboardCard__box">
           <HeadingElement className="ic-DashboardCard__box__header">
-            {I18n.t(`Published Courses (%{count})`, {
+            {/* {I18n.t(`Published Courses (%{count})`, {
               count: I18n.n(publishedCourses.length),
-            })}
+            })} */}
           </HeadingElement>
           {publishedCourses.length > 0 ? (
             <div className="ic-DashboardCard__box__container">{publishedCourses}</div>
@@ -203,7 +203,7 @@ export default class DashboardCardBox extends React.Component {
             emptyEl
           )}
         </div>
-        <div className="ic-DashboardCard__box">
+        {/* <div className="ic-DashboardCard__box">
           <HeadingElement className="ic-DashboardCard__box__header">
             {I18n.t(`Unpublished Courses (%{count})`, {
               count: I18n.n(unpublishedCourses.length),
@@ -214,13 +214,13 @@ export default class DashboardCardBox extends React.Component {
           ) : (
             emptyEl
           )}
-        </div>
+        </div> */}
       </div>
     )
   }
 
   render() {
-    const {connectDropTarget, showSplitDashboardView} = this.props
+    const { connectDropTarget, showSplitDashboardView } = this.props
     let dashboardCardBox
     if (!showSplitDashboardView) {
       const cards = this.state.courseCards.map(card => this.renderCard(card))

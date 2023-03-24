@@ -15,6 +15,925 @@
 # You should have received a copy of the GNU Affero General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 %>
+<style>
+.ic-notification{
+  display:none;
+}
+.detail_course{
+  display:flex;
+  flex-direction: column;
+  padding: 0 56px;
+  background:#E9ECEF;
+}
+.detail_course_img{
+  display:flex;
+  gap: 20px;
+  height:600px;
+
+}
+.left_side_course{
+  flex: 3;
+  display:flex;
+  gap:20px;
+  flex-direction: column;
+}
+.left_side_img{
+  height:75%;
+
+}
+.left_side_img img{
+  border-radius: 24px;
+  height:100%;
+}
+.left_side_detail{
+  height:25%;
+  background:white;
+  width:100%;
+  border-radius: 10px;
+}
+.left_side_detail_header{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 34px 5px 34px;
+  align-items: center;
+}
+.left_side_detail_header h1{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
+}
+.left_side_detail_header p{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+}
+.left_side_detail_body{
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 34px 0 34px;
+}
+
+.left_side_user{
+  display:flex;
+  gap: 20%;
+  flex: 1;
+}
+
+.teacher{
+  display: flex;
+  align-items: center;
+  gap:5px;
+}
+
+.teacher_img{
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), #696CFF;
+  border-radius: 197.5px;
+}
+.teacher_name h1{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  margin:0;
+}
+.teacher_name p{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #000000;
+  margin:0;
+
+}
+.student{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap:5px;
+}
+.student_img{
+  display:flex;
+}
+.student_name{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #0249B3;
+}
+
+
+.rating div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.rating p {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: right;
+}
+
+.right-side_course{
+  flex:1;
+  background:white;
+  border-radius: 10px;
+  
+}
+.right-side_1{
+  height:20%;
+  background:#F6F9FC;
+  width:100%;
+  justify-content: center;
+  align-items: center;
+  display:flex;
+  border-bottom: 1px solid #E9ECEF;
+  border-radius: 10px 10px 0 0;
+}
+.right-side_1 div {
+  width: 40%;
+  background: #FFFFFF;
+  border: 1px solid #5D9DFD;
+  border-radius: 10px;
+  height: 40%;
+  gap: 10px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  display:flex;
+}
+
+.right-side_1 div h1{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 49px;
+  color: #0249B3;
+}
+.right-side_1 div p{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+  color: #3C3C3C;
+}
+
+.right-side_2{
+  height:45%;
+  padding
+}
+.right-side_2 div {
+  border-bottom: 1px solid #E9ECEF;
+  height:25%;
+  width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.right-side_2 div p{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 175%;
+  text-transform: capitalize;
+  color: #5F5F5F;
+  margin-left: 25px;
+}
+.right-side_2 div h1{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 175%;
+  text-transform: capitalize;
+  color: #000000;
+  margin-right: 25px;
+}
+.right-side_3{
+  display: flex;
+  align-items: center;
+  height: 35%;
+  justify-content: center;
+}
+.right-side_3 button{
+  padding: 17px 42.5px;
+  background: #0249B3;
+  box-shadow: 0px 8px 24px rgba(171, 202, 255, 0.5);
+  border-radius: 10px;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  color: #FFFFFF;
+  border: none;
+}
+.detail_course_decription{
+  background: white;
+  margin-top: 24px;
+  background: #FFFFFF;
+  box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
+  border-radius: 8px;
+  padding-right: 30px;
+}
+.detail_course_decription_button{
+  display:flex;
+  gap:20px;
+  margin: 24px 0px 45px 34px;
+}
+.detail_course_decription_button button{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 140%;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  color: #0249B3;
+  padding:15px 30px;
+  background: #FFFFFF;
+  box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
+  border-radius: 8px;
+  border:1px solid #0249B3;
+}
+.active, .button_course:hover {
+  background-color: #0249B3 !important; 
+  color: white !important;
+}
+.detail_course_decription_span{
+  
+}
+.teacher_course{
+
+}
+.list_teacher_container-title{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+  color: #303030;
+}
+.list_teacher{
+  margin-top: 30px;
+  display:flex;
+  gap:30px;
+  position: relative;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+
+  
+}
+.item_teacher{
+  background: #FFFFFF;
+  box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.4);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+
+}
+.item_teacher_img{
+  padding:10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.item_teacher h1{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: right;
+  color: #000000;
+}
+.item_teacher_rating{
+  display: flex;
+  align-items: center;
+  gap:5px;
+}
+.item_teacher_rating h2{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: right;
+  color: #000000;
+}
+.item_teacher_rating img{
+  width: 16px;
+}
+.item_teacher_rating p{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: right;
+  color: #828282;
+}
+.item_teacher-p{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  display: flex;
+  align-items: flex-end;
+  color: #6D737A;
+}
+
+.teacher_page{
+  display: flex;
+  align-items: center;
+  margin-top: 90px;
+}
+.teacher_page_number{
+  display:flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.teacher_page_number_item{
+  width: 12px;
+  height: 12px;
+  background: #CFD3D6;
+  border-radius:10px;
+}
+.teacher_page_number_item:hover{
+  cursor:pointer;
+  background:#0249B3;
+}
+.teacher_page_button_item{
+  box-shadow: -4px 4px 20px rgba(32, 180, 134, 0.12);
+  border-radius: 8px;
+  padding: 5px 10px;
+  border: none;
+  background:#CFD3D6;
+}
+.teacher_page_button_item:hover{
+  cursor:pointer;
+}
+
+.listPage{
+    padding:10px;
+    text-align: center;
+    list-style: none;
+    margin-top:50px;
+}
+.listPage li{
+    background-color: #CFD3D6;
+    padding:10px 15px;
+    display: inline-block;
+    margin:0 10px;
+    cursor: pointer;
+}
+.listPage .active{
+    background-color: #B192EF;
+    color:#fff;
+}
+
+
+.rating_places{
+  display: flex;
+  gap: 80px;
+  margin-left: 35px;
+}
+.rating_places_left{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rating_places_left h1 {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
+  display: flex;
+  align-items: flex-end;
+  color: #646464;
+}
+
+.rating_places_left div{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.rating_places_left p{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 28px;
+  display: flex;
+  align-items: flex-end;
+  color: #52565C;
+}
+
+.rating_places_right_item{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.rating_places_right_item div{
+  width: 500px;
+  height: 8px;
+  background: #0249B3;
+  border-radius: 10px;
+}
+
+.comment{
+  margin-top: 50px;
+}
+.comment_item{
+  padding: 10px;
+  background: #FFFFFF;
+  box-shadow: 2px 4px 60px rgba(41, 44, 124, 0.1);
+  border-radius: 20px;
+  padding: 16px 24px;
+  margin:20px 0;
+  border-left: 5px solid #418EFF;
+}
+.comment_item_header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.comment_item_header_left{
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.comment_item_header_left_img{
+  width: 50px;
+  height: 50px;
+}
+.comment_item_header_left h1 {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  display: flex;
+  color: #222224;
+  margin:0;
+}
+.comment_item_header_left p{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  display: flex;
+  align-items: flex-end;
+  color: #222224;
+  margin:0;
+}
+.comment_item_header_right img{
+  width:15%;
+}
+
+.comment_item_body{
+  color: #5F5F7E;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: Montserrat;
+  margin: 20px 0;
+}
+</style>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+$(document).on('click','.button_course',function(){
+  $(this).addClass('active').siblings().removeClass('active');
+})
+$(document).on('click','.teacher_page_number_item',function(){
+  $(this).addClass('active').siblings().removeClass('active');
+})
+$(document).on('click','.teacher_page_button_item',function(){
+  $(this).addClass('active').siblings().removeClass('active');
+})
+
+$(document).on('click','#detail_course_decription_button button',function(){
+  $(".hide").hide(); // hide other divs, marked with hide class
+  var c = $(this).attr('class').split(' ')[0]; //Get First Class
+  $("#detail_course_decription_span ."+c).show(); //show anything inside content div with the class c (marked with a . to represent class)
+})
+
+
+</script>
+
+<%# detail_course%>
+<div class="detail_course">
+  <div class="detail_course_img">
+    <div class="left_side_course">
+      <div class="left_side_img">
+        <img src="/images/anhkhoahoc.jpg"/>
+      </div>
+      <div class="left_side_detail">
+        <div class="left_side_detail_header">
+          <h1 >Hướng dẫn scrum</h1>
+          <p>Đánh giá</p>
+        </div>
+        <div class="left_side_detail_body">
+          <div class="left_side_user">
+            <div class="teacher">
+              <div class="teacher_img">
+                <img src="/images/teacher.png"/>
+              </div>
+              <div class="teacher_name">
+                <h1>Giảng viên</h1>
+                <p>Nguyễn Văn A</p>
+              </div>
+            </div>
+            <div class="student">
+              <div class="student_img">
+                <div class="teacher_img" style="width: 35px">
+                  <img src="/images/teacher.png"/>
+                </div>
+                <div class="student">
+                  <img src="/images/student2.png"/>
+                </div>
+                <div class="student">
+                  <img src="/images/student3.png"/>
+                </div>
+                <div class="student">
+                  <img src="/images/student4.png"/>
+                </div>
+                <div class="student">
+                  <img src="/images/student5.png"/>
+                </div>
+              </div>
+              <div class="student_name">
+                258 sinh viên đã đăng ký
+              </div>
+            </div>
+          </div>
+          <div class="rating">
+            <div>4.9
+              <img src="/images/Star.png"/>
+              <img src="/images/Star.png"/>
+              <img src="/images/Star.png"/>
+              <img src="/images/Star.png"/>
+              <img src="/images/unStar.png"/>
+            </div>
+            <p>(5.764 Rating)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="right-side_course">
+      <div class="right-side_1">
+        <div>
+          <h1>5</h1>
+          <p>Tín chỉ</p>
+        </div>
+      </div>
+      <div class="right-side_2">
+        <div>
+          <p>Giáo viên</p>
+          <h1>Nguyễn văn A</h1>
+        </div>
+        <div>
+          <p>Thời gian</p>
+          <h1>10 giờ 20 phút</h1>
+        </div>
+        <div>
+          <p>Bài giảng</p>
+          <h1>10</h1>
+        </div>
+        <div>
+          <p>Học</p>
+          <h1>Online</h1>
+        </div>
+      </div>
+      <div class="right-side_3">
+        <button>Bắt đầu học ngay</button>
+      </div>
+    </div>
+  </div>
+  <div class="detail_course_decription">
+    <div id="detail_course_decription_button" class="detail_course_decription_button">
+      <button  class="description button_course active">Mô tả khóa học</button>
+      <button class="teacher_course button_course">Giảng viên</button>
+      <button  class="rating_course button_course">Đánh giá</button>
+    </div>
+    <div id="detail_course_decription_span" class="detail_course_decription_span">
+      <div class="description hide" style="display:block">
+        <p>
+          <p style="font-weight: bold;">Description:</p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularsed in the 1960 with release containing Lorem Ipsum passages desktop publishing software.
+
+          <p style="font-weight: bold;">Curriculum:</p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularsed in the 1960 with release containing Lorem Ipsum passages desktop publishing software.
+
+          <p style="font-weight: bold;">Certification:</p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularsed in the 1960 with release containing Lorem Ipsum passages desktop publishing software.</p>
+      </div>
+      <div class="teacher_course hide" style="display:none;">
+        <div class="list_teacher_container">
+          <h1 class="list_teacher_container-title">Danh sách giảng viên</h1>
+          <div class="list_teacher">
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher1.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher2.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher3.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher4.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher1.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher1.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher1.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher1.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher1.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher1.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+            <div class="item_teacher">
+              <div class="item_teacher_img">
+                <img src="/images/teacher1.png" style="width: 80%;"/>
+              </div>
+              <h1>Nguyễn Văn A</h1>
+              <div class="item_teacher_rating">
+                <h2>4.9</h2>
+                <img src="/images/Star.png"/>
+                <p>(rating)</p>
+              </div>
+              <p class="item_teacher-p">Social Media Expart</p>
+            </div>
+          </div>
+        </div>
+       <ul class="listPage">
+           
+        </ul>
+      </div>
+      <div class="rating_course hide" style="display:none;">
+        <div class="rating_places">
+          <div class="rating_places_left">
+            <h1>4/5</h1>
+            <div>
+              <img src="/images/Star.png"/>
+              <img src="/images/Star.png"/>
+              <img src="/images/Star.png"/>
+              <img src="/images/Star.png"/>
+              <img src="/images/unStar.png"/>
+              <p style="">(1.200)</p>
+            </div>
+            <p style="">258 người học</p>
+          </div>
+          <div class="rating_places_right">
+            <div class="rating_places_right_item">
+              <p>5 Stars</p>
+              <div></div>
+            </div>
+            <div class="rating_places_right_item">
+              <p>4 Stars</p>
+              <div></div>
+            </div>
+            <div class="rating_places_right_item">
+              <p>4 Stars</p>
+              <div></div>
+            </div>
+            <div class="rating_places_right_item">
+              <p>2 Stars</p>
+              <div></div>
+            </div>
+
+            <div class="rating_places_right_item">
+              <p>1 Stars</p>
+              <div></div>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <div class="comment_item">
+            <div class="comment_item_header">
+              <div class="comment_item_header_left">
+                <div class="comment_item_header_left_img">
+                  <img src="/images/user1.png"/>
+                </div>
+                <div>
+                  <h1>Jenny Wilson</h1>
+                  <p>UI-UX Designer</p>
+                </div>
+              </div>
+              <div class="comment_item_header_right">
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/unStar.png"/>
+              </div>
+            </div>
+            <div class="comment_item_body">
+              "Khi thị trường KDOL Việt Nam quá cạnh tranh từ cách đây 3-4 năm thì mình đã thử nghiệm việc đưa tư duy bán hàng online của Việt Nam sang Thái và cũng có 1 số thành công nhất định, đỉnh điểm là việc có 1 case bán được 1.5 tỷ doanh thu chỉ trong 3 ngày"
+            </div>
+          </div>
+           <div class="comment_item">
+            <div class="comment_item_header">
+              <div class="comment_item_header_left">
+                <div class="comment_item_header_left_img">
+                  <img src="/images/user2.png"/>
+                </div>
+                <div>
+                  <h1>Jenny Wilson</h1>
+                  <p>UI-UX Designer</p>
+                </div>
+              </div>
+              <div class="comment_item_header_right">
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/unStar.png"/>
+              </div>
+            </div>
+            <div class="comment_item_body">
+              "Khi thị trường KDOL Việt Nam quá cạnh tranh từ cách đây 3-4 năm thì mình đã thử nghiệm việc đưa tư duy bán hàng online của Việt Nam sang Thái và cũng có 1 số thành công nhất định, đỉnh điểm là việc có 1 case bán được 1.5 tỷ doanh thu chỉ trong 3 ngày"
+            </div>
+          </div>
+           <div class="comment_item">
+            <div class="comment_item_header">
+              <div class="comment_item_header_left">
+                <div class="comment_item_header_left_img">
+                  <img src="/images/user3.png"/>
+                </div>
+                <div>
+                  <h1>Jenny Wilson</h1>
+                  <p>UI-UX Designer</p>
+                </div>
+              </div>
+              <div class="comment_item_header_right">
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/unStar.png"/>
+              </div>
+            </div>
+            <div class="comment_item_body">
+              "Khi thị trường KDOL Việt Nam quá cạnh tranh từ cách đây 3-4 năm thì mình đã thử nghiệm việc đưa tư duy bán hàng online của Việt Nam sang Thái và cũng có 1 số thành công nhất định, đỉnh điểm là việc có 1 case bán được 1.5 tỷ doanh thu chỉ trong 3 ngày"
+            </div>
+          </div>
+           <div class="comment_item">
+            <div class="comment_item_header">
+              <div class="comment_item_header_left">
+                <div class="comment_item_header_left_img">
+                  <img src="/images/user1.png"/>
+                </div>
+                <div>
+                  <h1>Jenny Wilson</h1>
+                  <p>UI-UX Designer</p>
+                </div>
+              </div>
+              <div class="comment_item_header_right">
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/Star.png"/>
+                <img src="/images/unStar.png"/>
+              </div>
+            </div>
+            <div class="comment_item_body">
+              "Khi thị trường KDOL Việt Nam quá cạnh tranh từ cách đây 3-4 năm thì mình đã thử nghiệm việc đưa tư duy bán hàng online của Việt Nam sang Thái và cũng có 1 số thành công nhất định, đỉnh điểm là việc có 1 case bán được 1.5 tỷ doanh thu chỉ trong 3 ngày"
+            </div>
+          </div>
+        </div> 
+      </div>
+      
+    </div>
+  </div>
+</div>
+
 
 <% if !show_welcome_message? %>
 <div class="ic-notification">
@@ -42,3 +961,58 @@
   </div>
 </div>
 <% end %>
+
+
+<script>
+let thisPage = 1;
+let limit = 4;
+let list = document.querySelectorAll(".list_teacher .item_teacher");
+
+console.log(list);
+function loadItem() {
+  let beginGet = limit * (thisPage - 1);
+  let endGet = limit * thisPage - 1;
+  list.forEach((item, key) => {
+    if (key >= beginGet && key <= endGet) {
+      item.style.display = "flex";
+    } else {
+      item.style.display = "none";
+    }
+  });
+  listPage();
+}
+loadItem();
+function listPage() {
+  let count = Math.ceil(list.length / limit);
+  document.querySelector(".listPage").innerHTML = "";
+
+  if (thisPage != 1) {
+    let prev = document.createElement("li");
+    prev.innerText = "Quay lại";
+    prev.setAttribute("onclick", "changePage(" + (thisPage - 1) + ")");
+    document.querySelector(".listPage").appendChild(prev);
+  }
+
+  for (i = 1; i <= count; i++) {
+    let newPage = document.createElement("li");
+    newPage.innerText = i;
+    if (i == thisPage) {
+      newPage.classList.add("active");
+    }
+    newPage.setAttribute("onclick", "changePage(" + i + ")");
+    document.querySelector(".listPage").appendChild(newPage);
+  }
+
+  if (thisPage != count) {
+    let next = document.createElement("li");
+    next.innerText = "Tiếp theo";
+    next.setAttribute("onclick", "changePage(" + (thisPage + 1) + ")");
+    document.querySelector(".listPage").appendChild(next);
+  }
+}
+function changePage(i) {
+  thisPage = i;
+  loadItem();
+}
+
+</script>

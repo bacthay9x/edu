@@ -15,6 +15,125 @@
 # You should have received a copy of the GNU Affero General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 %>
+
+
+
+<% js_bundle :navigation_header %>
+
+<% if @domain_root_account && @domain_root_account.feature_enabled?(:product_tours) %>
+  <% js_bundle :nav_tourpoints %>
+<% end %>
+
+
+<%
+  if k5_user?
+    dashboard_title = t('Home')
+    dashboard_icon_path = "shared/svg/svg_icon_home"
+    courses_title = t('Subjects')
+  else
+    dashboard_title = t('Dashboard')
+    dashboard_icon_path = "shared/svg/#{'k12/' if k12?}svg_icon_dashboard"
+    courses_title = t('Courses')
+  end
+%>
+
+<style>
+<%# dashboard%>
+.display_none{
+  display:none !important;
+}
+
+.h-100{
+  height:100%;
+}
+
+
+<%# Calendar%>
+.flex-row{
+  display:flex;
+  flex-direction: column;
+  background:#E9ECEF;
+}
+.ml-0{
+  margin-left:0 !important;
+}
+.p-0{
+  padding:0 !important;
+  background:#E9ECEF;
+}
+
+.calendar-header{
+  margin-left:260px;
+  display:block !important;
+  background:white;
+}
+.ml-257{
+  margin-left: 257px !important;
+  width : 84.5% !important;
+  background:#E9ECEF;
+  margin-top: -200px;
+}
+.ml-260{
+  margin-left:260px !important;
+}
+.ml-240{
+  margin-left:240px !important;
+
+}
+.w-72{
+  width:72% !important;
+}
+.right-side{
+      display: flex;
+      padding:20px;
+      background: white;
+      padding-bottom: 0px;
+      background: #FFFFFF;
+      box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
+      border-radius: 8px;
+      margin-left: 18px;
+
+}
+.header-bar{
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+  margin:20px 2px -22px 20px;
+  width:auto !important;
+}
+
+<%# Courses%>
+.courses-header{
+  display:block !important;
+  
+}
+.ic-Layout-contentMain{
+  padding:0 !important;
+
+}
+.bgE9ECEF{
+  background:#E9ECEF;
+}
+
+<%# Detail Courses%>
+.ic-app-nav-toggle-and-crumbs .right-of-crumbs{
+  margin-right:20px
+}
+.ic-app-nav-toggle-and-crumbs .right-of-crumbs > *{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.ic-app-nav-toggle-and-crumbs.no-print{
+  border-bottom:none;
+  background: white;
+  padding: 0 24px;
+  margin:0
+}
+</style>
+
+
+
 <%-
   css_bundle(:instructure_eportfolio) if @eportfolio_view === true
   css_bundle(:new_user_tutorials) if tutorials_enabled?
@@ -94,7 +213,7 @@
 <%# Flash messages must be outside of #application or they won't work in screenreaders with modals open. %>
 <%= render :partial => 'shared/static_notices' %>
 <%= render :partial => 'shared/flash_notices' %>
-<div id="application" class="ic-app">
+<div id="application" class="ic-app <%= 'p-20' if current_page?('/calendar') %>" style="width: 100%;height: 100%;">
   <%= render(:partial => 'shared/new_nav_header') unless @headers == false %>
 
   <div id="instructure_ajax_error_box">
@@ -102,7 +221,8 @@
     <iframe id="instructure_ajax_error_result" src="about:blank" style="border: 0;" title="<%= t('Error') %>"></iframe>
   </div>
 
-  <div id="wrapper" class="ic-Layout-wrapper">
+  <div id="wrapper" style="width: 100%;height: 100%;" class="ic-Layout-wrapper <%= 'ml-260' if current_page?('/') %>  <%= 'ml-260' if current_page?('/courses') %>  <%= 'ml-0' if current_page?('/calendar') %> <%= 'ml-260 bgE9ECEF' if (current_page?('/courses/1') || current_page?('/courses/2') || current_page?('/courses/3') || current_page?('/courses/4')|| current_page?('/courses/5') || current_page?('/courses/6')|| current_page?('/courses/7')  || current_page?('/courses/8') || current_page?('/courses/9')|| current_page?('/courses/10') || current_page?('/courses/11') || current_page?('/courses/12')  || current_page?('/courses/13')  || current_page?('/courses/14') || current_page?('/courses/15')|| current_page?('/courses/16') || current_page?('/courses/17')|| current_page?('/courses/18')|| current_page?('/courses/19') || current_page?('/courses/20') || current_page?('/courses/21') || current_page?('/courses/22')|| current_page?('/courses/23') || current_page?('/courses/24') || current_page?('/courses/25') || current_page?('/courses/26') || current_page?('/courses/27') || current_page?('/courses/28') || current_page?('/courses/29') || current_page?('/courses/30') || current_page?('/courses/31')|| current_page?('/courses/32')|| current_page?('/courses/33')|| current_page?('/courses/34')|| current_page?('/courses/35')|| current_page?('/courses/36')|| current_page?('/courses/37')|| current_page?('/courses/38')|| current_page?('/courses/39')|| current_page?('/courses/40')|| current_page?('/courses/41')|| current_page?('/courses/42')|| current_page?('/courses/43')|| current_page?('/courses/44')|| current_page?('/courses/45')|| current_page?('/courses/46')|| current_page?('/courses/47')|| current_page?('/courses/48')|| current_page?('/courses/49')|| current_page?('/courses/50')|| current_page?('/courses/51')|| current_page?('/courses/52')|| current_page?('/courses/53')|| current_page?('/courses/54')|| current_page?('/courses/55')|| current_page?('/courses/56')|| current_page?('/courses/57')|| current_page?('/courses/58')|| current_page?('/courses/59')|| current_page?('/courses/60')|| current_page?('/courses/61')|| current_page?('/courses/62')|| current_page?('/courses/63')|| current_page?('/courses/64')|| current_page?('/courses/65')|| current_page?('/courses/66')|| current_page?('/courses/67')|| current_page?('/courses/68')|| current_page?('/courses/69')|| current_page?('/courses/70')|| current_page?('/courses/71')|| current_page?('/courses/72')|| current_page?('/courses/73')|| current_page?('/courses/74')|| current_page?('/courses/75')|| current_page?('/courses/76')|| current_page?('/courses/77')|| current_page?('/courses/78')|| current_page?('/courses/79')|| current_page?('/courses/80')|| current_page?('/courses/81')|| current_page?('/courses/82')|| current_page?('/courses/83')|| current_page?('/courses/84')|| current_page?('/courses/85')|| current_page?('/courses/86')|| current_page?('/courses/87')|| current_page?('/courses/88')|| current_page?('/courses/89')|| current_page?('/courses/90')|| current_page?('/courses/91')|| current_page?('/courses/92')|| current_page?('/courses/93')|| current_page?('/courses/4')|| current_page?('/courses/95')|| current_page?('/courses/96')|| current_page?('/courses/97')|| current_page?('/courses/98')|| current_page?('/courses/99')|| current_page?('/courses/100')|| current_page?('/courses/101')|| current_page?('/courses/102')|| current_page?('/courses/103')|| current_page?('/courses/104')|| current_page?('/courses/105')|| current_page?('/courses/106')|| current_page?('/courses/107')|| current_page?('/courses/108')|| current_page?('/courses/109')|| current_page?('/courses/110')|| current_page?('/courses/111')|| current_page?('/courses/112')|| current_page?('/courses/113')|| current_page?('/courses/114')|| current_page?('/courses/115')|| current_page?('/courses/116')|| current_page?('/courses/117')|| current_page?('/courses/118')|| current_page?('/courses/119')|| current_page?('/courses/120')|| current_page?('/courses/121')|| current_page?('/courses/122')|| current_page?('/courses/123')|| current_page?('/courses/124')|| current_page?('/courses/125')|| current_page?('/courses/126')|| current_page?('/courses/127')|| current_page?('/courses/128')|| current_page?('/courses/129')|| current_page?('/courses/130')|| current_page?('/courses/131')|| current_page?('/courses/132')|| current_page?('/courses/133')|| current_page?('/courses/134')|| current_page?('/courses/135')|| current_page?('/courses/136')|| current_page?('/courses/137')|| current_page?('/courses/138')|| current_page?('/courses/139')|| current_page?('/courses/140')|| current_page?('/courses/141')|| current_page?('/courses/142')|| current_page?('/courses/143')|| current_page?('/courses/144')|| current_page?('/courses/145')|| current_page?('/courses/146')|| current_page?('/courses/147')|| current_page?('/courses/148')|| current_page?('/courses/149')|| current_page?('/courses/150')|| current_page?('/courses/151')|| current_page?('/courses/152')|| current_page?('/courses/153')|| current_page?('/courses/154')|| current_page?('/courses/155')|| current_page?('/courses/156')|| current_page?('/courses/157')|| current_page?('/courses/158')|| current_page?('/courses/159')|| current_page?('/courses/160')|| current_page?('/courses/161')|| current_page?('/courses/162')|| current_page?('/courses/163')|| current_page?('/courses/164')|| current_page?('/courses/165')|| current_page?('/courses/166')|| current_page?('/courses/167')|| current_page?('/courses/168')|| current_page?('/courses/169')|| current_page?('/courses/170')|| current_page?('/courses/171')|| current_page?('/courses/172')|| current_page?('/courses/173')|| current_page?('/courses/174')|| current_page?('/courses/175')|| current_page?('/courses/176')|| current_page?('/courses/177')|| current_page?('/courses/178')|| current_page?('/courses/179')|| current_page?('/courses/180')|| current_page?('/courses/181')|| current_page?('/courses/182')|| current_page?('/courses/183')|| current_page?('/courses/184')|| current_page?('/courses/185')|| current_page?('/courses/186')|| current_page?('/courses/187')|| current_page?('/courses/188')|| current_page?('/courses/189')|| current_page?('/courses/190')|| current_page?('/courses/191')|| current_page?('/courses/192')|| current_page?('/courses/193')|| current_page?('/courses/194')|| current_page?('/courses/195')|| current_page?('/courses/196')|| current_page?('/courses/197')|| current_page?('/courses/198')|| current_page?('/courses/199')|| current_page?('/courses/200')|| current_page?('/courses/201')|| current_page?('/courses/202')|| current_page?('/courses/203')|| current_page?('/courses/204')|| current_page?('/courses/205')|| current_page?('/courses/206')|| current_page?('/courses/207')|| current_page?('/courses/208')|| current_page?('/courses/209')|| current_page?('/courses/210')|| current_page?('/courses/211')|| current_page?('/courses/212')|| current_page?('/courses/213')|| current_page?('/courses/214')|| current_page?('/courses/215')|| current_page?('/courses/216')|| current_page?('/courses/217')|| current_page?('/courses/218')|| current_page?('/courses/219')|| current_page?('/courses/220')|| current_page?('/courses/221')|| current_page?('/courses/222')|| current_page?('/courses/223')|| current_page?('/courses/224')|| current_page?('/courses/225')|| current_page?('/courses/226')|| current_page?('/courses/227')|| current_page?('/courses/228')|| current_page?('/courses/229')|| current_page?('/courses/230')|| current_page?('/courses/231')|| current_page?('/courses/232')|| current_page?('/courses/233')|| current_page?('/courses/234')|| current_page?('/courses/235')|| current_page?('/courses/236')|| current_page?('/courses/237')|| current_page?('/courses/238')|| current_page?('/courses/239')|| current_page?('/courses/240')|| current_page?('/courses/241')|| current_page?('/courses/242')|| current_page?('/courses/243')|| current_page?('/courses/244')|| current_page?('/courses/245')|| current_page?('/courses/246')|| current_page?('/courses/247')|| current_page?('/courses/248')|| current_page?('/courses/249')|| current_page?('/courses/250')|| current_page?('/courses/251')|| current_page?('/courses/252')|| current_page?('/courses/253')|| current_page?('/courses/254')|| current_page?('/courses/255')|| current_page?('/courses/256')|| current_page?('/courses/257')|| current_page?('/courses/258')|| current_page?('/courses/259')|| current_page?('/courses/260')|| current_page?('/courses/261')|| current_page?('/courses/262')|| current_page?('/courses/263')|| current_page?('/courses/264')|| current_page?('/courses/265')|| current_page?('/courses/266')|| current_page?('/courses/267')|| current_page?('/courses/268')|| current_page?('/courses/269')|| current_page?('/courses/270')|| current_page?('/courses/271')|| current_page?('/courses/272')|| current_page?('/courses/273')|| current_page?('/courses/274')|| current_page?('/courses/275')|| current_page?('/courses/276')|| current_page?('/courses/277')|| current_page?('/courses/278')|| current_page?('/courses/279')|| current_page?('/courses/280')|| current_page?('/courses/281')|| current_page?('/courses/282')|| current_page?('/courses/283')|| current_page?('/courses/284')|| current_page?('/courses/285')|| current_page?('/courses/286')|| current_page?('/courses/287')|| current_page?('/courses/288')|| current_page?('/courses/289')|| current_page?('/courses/290')|| current_page?('/courses/291')|| current_page?('/courses/292')|| current_page?('/courses/293')|| current_page?('/courses/294')|| current_page?('/courses/295')|| current_page?('/courses/296')|| current_page?('/courses/297')|| current_page?('/courses/298')|| current_page?('/courses/299')|| current_page?('/courses/300')|| current_page?('/courses/301')|| current_page?('/courses/302')|| current_page?('/courses/303')|| current_page?('/courses/304')|| current_page?('/courses/305')|| current_page?('/courses/306')|| current_page?('/courses/307')|| current_page?('/courses/308')|| current_page?('/courses/309')|| current_page?('/courses/310')|| current_page?('/courses/311')|| current_page?('/courses/312')|| current_page?('/courses/313')|| current_page?('/courses/314')|| current_page?('/courses/315')|| current_page?('/courses/316')|| current_page?('/courses/317')|| current_page?('/courses/318')|| current_page?('/courses/319')|| current_page?('/courses/320')|| current_page?('/courses/321')|| current_page?('/courses/322')|| current_page?('/courses/323')|| current_page?('/courses/324')|| current_page?('/courses/325')|| current_page?('/courses/326')|| current_page?('/courses/327')|| current_page?('/courses/328')|| current_page?('/courses/329')|| current_page?('/courses/330')|| current_page?('/courses/331')|| current_page?('/courses/332')|| current_page?('/courses/333')|| current_page?('/courses/334')|| current_page?('/courses/335')|| current_page?('/courses/336')|| current_page?('/courses/337')|| current_page?('/courses/338')|| current_page?('/courses/339')|| current_page?('/courses/340')|| current_page?('/courses/341')|| current_page?('/courses/342')|| current_page?('/courses/343')|| current_page?('/courses/344')|| current_page?('/courses/345')|| current_page?('/courses/346')|| current_page?('/courses/347')|| current_page?('/courses/348')|| current_page?('/courses/349')|| current_page?('/courses/350')|| current_page?('/courses/351')|| current_page?('/courses/352')|| current_page?('/courses/353')|| current_page?('/courses/354')|| current_page?('/courses/355')|| current_page?('/courses/356')|| current_page?('/courses/357')|| current_page?('/courses/358')|| current_page?('/courses/359')|| current_page?('/courses/360')|| current_page?('/courses/361')|| current_page?('/courses/362')|| current_page?('/courses/363')|| current_page?('/courses/364')|| current_page?('/courses/365')|| current_page?('/courses/366')|| current_page?('/courses/367')|| current_page?('/courses/368')|| current_page?('/courses/369')|| current_page?('/courses/370')|| current_page?('/courses/371')|| current_page?('/courses/372')|| current_page?('/courses/373')|| current_page?('/courses/374')|| current_page?('/courses/375')|| current_page?('/courses/376')|| current_page?('/courses/377')|| current_page?('/courses/378')|| current_page?('/courses/379')|| current_page?('/courses/380')|| current_page?('/courses/381')|| current_page?('/courses/382')|| current_page?('/courses/383')|| current_page?('/courses/384')|| current_page?('/courses/385')|| current_page?('/courses/386')|| current_page?('/courses/387')|| current_page?('/courses/388')|| current_page?('/courses/389')|| current_page?('/courses/390')|| current_page?('/courses/391')|| current_page?('/courses/392')|| current_page?('/courses/393')|| current_page?('/courses/394')|| current_page?('/courses/395')|| current_page?('/courses/396')|| current_page?('/courses/397')|| current_page?('/courses/398')|| current_page?('/courses/399')|| current_page?('/courses/400')|| current_page?('/courses/401')|| current_page?('/courses/402')|| current_page?('/courses/403')|| current_page?('/courses/404')|| current_page?('/courses/405')|| current_page?('/courses/406')|| current_page?('/courses/407')|| current_page?('/courses/408')|| current_page?('/courses/409')|| current_page?('/courses/410')|| current_page?('/courses/411')|| current_page?('/courses/412')|| current_page?('/courses/413')|| current_page?('/courses/414')|| current_page?('/courses/415')|| current_page?('/courses/416')|| current_page?('/courses/417')|| current_page?('/courses/418')|| current_page?('/courses/419')|| current_page?('/courses/420')|| current_page?('/courses/421')|| current_page?('/courses/422')|| current_page?('/courses/423')|| current_page?('/courses/424')|| current_page?('/courses/425')|| current_page?('/courses/426')|| current_page?('/courses/427')|| current_page?('/courses/428')|| current_page?('/courses/429')|| current_page?('/courses/430')|| current_page?('/courses/431')|| current_page?('/courses/432')|| current_page?('/courses/433')|| current_page?('/courses/434')|| current_page?('/courses/435')|| current_page?('/courses/436')|| current_page?('/courses/437')|| current_page?('/courses/438')|| current_page?('/courses/439')|| current_page?('/courses/440')|| current_page?('/courses/441')|| current_page?('/courses/442')|| current_page?('/courses/443')|| current_page?('/courses/444')|| current_page?('/courses/445')|| current_page?('/courses/446')|| current_page?('/courses/447')|| current_page?('/courses/448')|| current_page?('/courses/449')|| current_page?('/courses/450')|| current_page?('/courses/451')|| current_page?('/courses/452')|| current_page?('/courses/453')|| current_page?('/courses/454')|| current_page?('/courses/455')|| current_page?('/courses/456')|| current_page?('/courses/457')|| current_page?('/courses/458')|| current_page?('/courses/459')|| current_page?('/courses/460')|| current_page?('/courses/461')|| current_page?('/courses/462')|| current_page?('/courses/463')|| current_page?('/courses/464')|| current_page?('/courses/465')|| current_page?('/courses/466')|| current_page?('/courses/467')|| current_page?('/courses/468')|| current_page?('/courses/469')|| current_page?('/courses/470')|| current_page?('/courses/471')|| current_page?('/courses/472')|| current_page?('/courses/473')|| current_page?('/courses/474')|| current_page?('/courses/475')|| current_page?('/courses/476')|| current_page?('/courses/477')|| current_page?('/courses/478')|| current_page?('/courses/479')|| current_page?('/courses/480')|| current_page?('/courses/481')|| current_page?('/courses/482')|| current_page?('/courses/483')|| current_page?('/courses/484')|| current_page?('/courses/485')|| current_page?('/courses/486')|| current_page?('/courses/487')|| current_page?('/courses/488')|| current_page?('/courses/489')|| current_page?('/courses/490')|| current_page?('/courses/491')|| current_page?('/courses/492')|| current_page?('/courses/493')|| current_page?('/courses/494')|| current_page?('/courses/495')|| current_page?('/courses/496')|| current_page?('/courses/497')|| current_page?('/courses/498')|| current_page?('/courses/499')|| current_page?('/courses/500')|| current_page?('/courses/501')|| current_page?('/courses/502')|| current_page?('/courses/503')|| current_page?('/courses/504')|| current_page?('/courses/505')|| current_page?('/courses/506')|| current_page?('/courses/507')|| current_page?('/courses/508')|| current_page?('/courses/509')|| current_page?('/courses/510')|| current_page?('/courses/511')|| current_page?('/courses/512')|| current_page?('/courses/513')|| current_page?('/courses/514')|| current_page?('/courses/515')|| current_page?('/courses/516')|| current_page?('/courses/517')|| current_page?('/courses/518')|| current_page?('/courses/519')|| current_page?('/courses/520')|| current_page?('/courses/521')|| current_page?('/courses/522')|| current_page?('/courses/523')|| current_page?('/courses/524')|| current_page?('/courses/525')|| current_page?('/courses/526')|| current_page?('/courses/527')|| current_page?('/courses/528')|| current_page?('/courses/529')|| current_page?('/courses/530')|| current_page?('/courses/531')|| current_page?('/courses/532')|| current_page?('/courses/533')|| current_page?('/courses/534')|| current_page?('/courses/535')|| current_page?('/courses/536')|| current_page?('/courses/537')|| current_page?('/courses/538')|| current_page?('/courses/539')|| current_page?('/courses/540')|| current_page?('/courses/541')|| current_page?('/courses/542')|| current_page?('/courses/543')|| current_page?('/courses/544')|| current_page?('/courses/545')|| current_page?('/courses/546')|| current_page?('/courses/547')|| current_page?('/courses/548')|| current_page?('/courses/549')|| current_page?('/courses/550')|| current_page?('/courses/551')|| current_page?('/courses/552')|| current_page?('/courses/553')|| current_page?('/courses/554')|| current_page?('/courses/555')|| current_page?('/courses/556')|| current_page?('/courses/557')|| current_page?('/courses/558')|| current_page?('/courses/559')|| current_page?('/courses/560')|| current_page?('/courses/561')|| current_page?('/courses/562')|| current_page?('/courses/563')|| current_page?('/courses/564')|| current_page?('/courses/565')|| current_page?('/courses/566')|| current_page?('/courses/567')|| current_page?('/courses/568')|| current_page?('/courses/569')|| current_page?('/courses/570')|| current_page?('/courses/571')|| current_page?('/courses/572')|| current_page?('/courses/573')|| current_page?('/courses/574')|| current_page?('/courses/575')|| current_page?('/courses/576')|| current_page?('/courses/577')|| current_page?('/courses/578')|| current_page?('/courses/579')|| current_page?('/courses/580')|| current_page?('/courses/581')|| current_page?('/courses/582')|| current_page?('/courses/583')|| current_page?('/courses/584')|| current_page?('/courses/585')|| current_page?('/courses/586')|| current_page?('/courses/587')|| current_page?('/courses/588')|| current_page?('/courses/589')|| current_page?('/courses/590')|| current_page?('/courses/591')|| current_page?('/courses/592')|| current_page?('/courses/593')|| current_page?('/courses/594')|| current_page?('/courses/595')|| current_page?('/courses/596')|| current_page?('/courses/597')|| current_page?('/courses/598')|| current_page?('/courses/599')|| current_page?('/courses/600')|| current_page?('/courses/601')|| current_page?('/courses/602')|| current_page?('/courses/603')|| current_page?('/courses/604')|| current_page?('/courses/605')|| current_page?('/courses/606')|| current_page?('/courses/607')|| current_page?('/courses/608')|| current_page?('/courses/609')|| current_page?('/courses/610')|| current_page?('/courses/611')|| current_page?('/courses/612')|| current_page?('/courses/613')|| current_page?('/courses/614')|| current_page?('/courses/615')|| current_page?('/courses/616')|| current_page?('/courses/617')|| current_page?('/courses/618')|| current_page?('/courses/619')|| current_page?('/courses/620')|| current_page?('/courses/621')|| current_page?('/courses/622')|| current_page?('/courses/623')|| current_page?('/courses/624')|| current_page?('/courses/625')|| current_page?('/courses/626')|| current_page?('/courses/627')|| current_page?('/courses/628')|| current_page?('/courses/629')|| current_page?('/courses/630')|| current_page?('/courses/631')|| current_page?('/courses/632')|| current_page?('/courses/633')|| current_page?('/courses/634')|| current_page?('/courses/635')|| current_page?('/courses/636')|| current_page?('/courses/637')|| current_page?('/courses/638')|| current_page?('/courses/639')|| current_page?('/courses/640')|| current_page?('/courses/641')|| current_page?('/courses/642')|| current_page?('/courses/643')|| current_page?('/courses/644')|| current_page?('/courses/645')|| current_page?('/courses/646')|| current_page?('/courses/647')|| current_page?('/courses/648')|| current_page?('/courses/649')|| current_page?('/courses/650')|| current_page?('/courses/651')|| current_page?('/courses/652')|| current_page?('/courses/653')|| current_page?('/courses/654')|| current_page?('/courses/655')|| current_page?('/courses/656')|| current_page?('/courses/657')|| current_page?('/courses/658')|| current_page?('/courses/659')|| current_page?('/courses/660')|| current_page?('/courses/661')|| current_page?('/courses/662')|| current_page?('/courses/663')|| current_page?('/courses/664')|| current_page?('/courses/665')|| current_page?('/courses/666')|| current_page?('/courses/667')|| current_page?('/courses/668')|| current_page?('/courses/669')|| current_page?('/courses/670')|| current_page?('/courses/671')|| current_page?('/courses/672')|| current_page?('/courses/673')|| current_page?('/courses/674')|| current_page?('/courses/675')|| current_page?('/courses/676')|| current_page?('/courses/677')|| current_page?('/courses/678')|| current_page?('/courses/679')|| current_page?('/courses/670')|| current_page?('/courses/671')|| current_page?('/courses/672')|| current_page?('/courses/673')|| current_page?('/courses/674')|| current_page?('/courses/675')|| current_page?('/courses/676')|| current_page?('/courses/677')|| current_page?('/courses/678')|| current_page?('/courses/679')|| current_page?('/courses/690')|| current_page?('/courses/691')|| current_page?('/courses/692')|| current_page?('/courses/693')|| current_page?('/courses/694')|| current_page?('/courses/695')|| current_page?('/courses/696')|| current_page?('/courses/697')|| current_page?('/courses/698')|| current_page?('/courses/699')|| current_page?('/courses/700')|| current_page?('/courses/701')|| current_page?('/courses/702')|| current_page?('/courses/703')|| current_page?('/courses/704')|| current_page?('/courses/705')|| current_page?('/courses/706')|| current_page?('/courses/707')|| current_page?('/courses/708')|| current_page?('/courses/709')|| current_page?('/courses/710')|| current_page?('/courses/711')|| current_page?('/courses/712')|| current_page?('/courses/713')|| current_page?('/courses/714')|| current_page?('/courses/715')|| current_page?('/courses/716')|| current_page?('/courses/717')|| current_page?('/courses/718')|| current_page?('/courses/719')|| current_page?('/courses/720')|| current_page?('/courses/721')|| current_page?('/courses/722')|| current_page?('/courses/723')|| current_page?('/courses/724')|| current_page?('/courses/725')|| current_page?('/courses/726')|| current_page?('/courses/727')|| current_page?('/courses/728')|| current_page?('/courses/729')|| current_page?('/courses/730')|| current_page?('/courses/731')|| current_page?('/courses/732')|| current_page?('/courses/733')|| current_page?('/courses/734')|| current_page?('/courses/735')|| current_page?('/courses/736')|| current_page?('/courses/737')|| current_page?('/courses/738')|| current_page?('/courses/739')|| current_page?('/courses/740')|| current_page?('/courses/741')|| current_page?('/courses/742')|| current_page?('/courses/743')|| current_page?('/courses/744')|| current_page?('/courses/745')|| current_page?('/courses/746')|| current_page?('/courses/747')|| current_page?('/courses/748')|| current_page?('/courses/749')|| current_page?('/courses/750')|| current_page?('/courses/751')|| current_page?('/courses/752')|| current_page?('/courses/753')|| current_page?('/courses/754')|| current_page?('/courses/755')|| current_page?('/courses/756')|| current_page?('/courses/757')|| current_page?('/courses/758')|| current_page?('/courses/759')|| current_page?('/courses/760')|| current_page?('/courses/761')|| current_page?('/courses/762')|| current_page?('/courses/763')|| current_page?('/courses/764')|| current_page?('/courses/765')|| current_page?('/courses/766')|| current_page?('/courses/767')|| current_page?('/courses/768')|| current_page?('/courses/769')|| current_page?('/courses/770')|| current_page?('/courses/771')|| current_page?('/courses/772')|| current_page?('/courses/773')|| current_page?('/courses/774')|| current_page?('/courses/775')|| current_page?('/courses/776')|| current_page?('/courses/777')|| current_page?('/courses/778')|| current_page?('/courses/779')|| current_page?('/courses/780')|| current_page?('/courses/781')|| current_page?('/courses/782')|| current_page?('/courses/783')|| current_page?('/courses/784')|| current_page?('/courses/785')|| current_page?('/courses/786')|| current_page?('/courses/787')|| current_page?('/courses/788')|| current_page?('/courses/789')|| current_page?('/courses/790')|| current_page?('/courses/791')|| current_page?('/courses/792')|| current_page?('/courses/793')|| current_page?('/courses/794')|| current_page?('/courses/795')|| current_page?('/courses/796')|| current_page?('/courses/797')|| current_page?('/courses/798')|| current_page?('/courses/799')|| current_page?('/courses/800')|| current_page?('/courses/801')|| current_page?('/courses/802')|| current_page?('/courses/803')|| current_page?('/courses/804')|| current_page?('/courses/805')|| current_page?('/courses/806')|| current_page?('/courses/807')|| current_page?('/courses/808')|| current_page?('/courses/809')) %>  " >
+
     <% if crumbs.length > 1 %>
       <div class="ic-app-nav-toggle-and-crumbs no-print">
         <% if @show_left_side %>
@@ -143,11 +263,34 @@
             <% end %>
           <% end %>
         </div>
-
+    
+        <div>
+                    <div  class="menu-item ic-app-header__menu-list-item <%= 'ic-app-header__menu-list-item--active' if active_path?('/profile') %>">
+                      <button id="global_nav_profile_link" class="ic-app-header__menu-list-link" style="display: flex;align-items: center;" >
+                          <div class="menu-item-icon-container" style="margin: 0;">
+                            <div aria-hidden="true" class="fs-exclude ic-avatar <% if @real_current_user && @real_current_user != @current_user %>ic-avatar--fake-student<% end %>">
+                              <img src="<%= @current_user.try { |usr| avatar_image_attrs(usr).first } %>" alt="<%= @current_user.short_name %>" />
+                            </div>
+                            <span class="menu-item__badge"></span>
+                        </div>
+                        <div style="margin-left: 10px;">
+                          <div class="menu-item__text" style="color: #232D42;font-size: 16px;">
+                            <%= t('Austin Robertson') %>
+                          </div>
+                          <div class="menu-item__text" style="color: #8A92A6;font-size: 12px;">
+                            <%= t('Marketing Administrator') %>
+                          </div>
+                        </div>
+                        
+                      </button>
+                    </div>
+                </div>
       </div>
     <% end %>
-    <div id="main" class="ic-Layout-columns">
-      <% if !@body_class_no_headers %>
+    <div>
+    </div>
+    <div id="main" class="ic-Layout-columns " style="width: 100%;height: 100%;">
+    <% if !@body_class_no_headers %>
         <div class="ic-Layout-watermark"></div>
       <% end %>
       <% if @show_left_side %>
@@ -157,7 +300,7 @@
             list_view_class = 'list-view'
           end
         %>
-        <div id="left-side"
+      <div id="left-side"
           class="ic-app-course-menu ic-sticky-on <%= list_view_class %>"
           style="display: <%= @collapse_course_menu ? "none" : "block" %>"
           >
@@ -175,8 +318,8 @@
           <% end %>
           </div>
         </div>
-      <% end %>
-      <div id="not_right_side" class="ic-app-main-content">
+    <% end %>
+      <div id="not_right_side" class="ic-app-main-content  <%= 'flex-row' if current_page?('/calendar') %>" style="height: 100%;width: 100%">
         <div id="content-wrapper" class="ic-Layout-contentWrapper">
           <% if should_show_migration_limitation_message %>
             <% js_bundle :quiz_migration_alerts %>
@@ -210,21 +353,171 @@
             </div>
           <% end %>
           <%= render :partial => 'shared/content_notices' if @has_content_notices && @show_left_side %>
-          <div id="content" class="ic-Layout-contentMain" role="main">
+          <div id="content" class="ic-Layout-contentMain <%= 'p-0 h-100' if current_page?('/calendar') %> <%= 'bgE9ECEF h-100' if current_page?('/courses') %>  <%= 'bgE9ECEF h-100' if current_page?('/') %>" role="main" style="width: 100%;">
+            <div class="<%= 'calendar-header' if current_page?('/calendar') %>" style="display:none">
+              <div style="display: flex;justify-content: space-between;margin-bottom: 15px; padding: 20px 20px 0 20px;">
+                <div style="position: relative;margin-left: 20px;align-items: center;display: flex;">
+                  <img style="position: absolute; top: 20px;width: 16px;left: 13px;" src="/images/Search.png"/>
+                  <input aria-describedby="forgot_password_instructions" placeholder="Tìm kiếm..." style ="border: 1px solid #E0E0E0;font-size: 16px;height: 40px;padding: 5px 0 5px 35px;" class="ic-Input email_address text" type="text" name="pseudonym_session[unique_id_forgot]" value="" id="pseudonym_session_unique_id_forgot" />
+                </div>
+                
+                <div>
+                    <div  class="menu-item ic-app-header__menu-list-item <%= 'ic-app-header__menu-list-item--active' if active_path?('/profile') %>">
+                      <button id="global_nav_profile_link" class="ic-app-header__menu-list-link" style="display: flex;align-items: center;" >
+                          <div class="menu-item-icon-container" style="margin: 0;">
+                            <div aria-hidden="true" class="fs-exclude ic-avatar <% if @real_current_user && @real_current_user != @current_user %>ic-avatar--fake-student<% end %>">
+                              <img src="<%= @current_user.try { |usr| avatar_image_attrs(usr).first } %>" alt="<%= @current_user.short_name %>" />
+                            </div>
+                            <span class="menu-item__badge"></span>
+                        </div>
+                        <div style="margin-left: 10px;">
+                          <div class="menu-item__text" style="color: #232D42;font-size: 16px;">
+                            <%= t('Austin Robertson') %>
+                          </div>
+                          <div class="menu-item__text" style="color: #8A92A6;font-size: 12px;">
+                            <%= t('Marketing Administrator') %>
+                          </div>
+                        </div>
+                        
+                      </button>
+                    </div>
+                </div>
+               
+              </div>
+              <div style=" background:#E9ECEF;">
+                  <div style="padding-left: 20px;margin-bottom: 80px;position: relative;background: radial-gradient(36.28% 150.93% at 50% 50%, #3B8AFF 0%, #0048B3 100%);border-radius: 0px 0px 16px 16px;height:162px">
+                  <h1 style="font-family: 'Montserrat';font-style: normal;font-weight: 700;font-size: 40px;line-height: 49px;color: white;margin-left: 20px;padding-top: 24px;">Xin chào học viên</h1>
+                  <p style="font-family: 'Montserrat';font-style: normal;font-weight: 500;font-size: 16px;line-height: 130%;color: white;margin-left: 20px;margin-top: 0px;">Chào mừng bạn đến với khóa học.</p>
+                  <div  style="display: flex;background: white;align-items: center;padding-left: 24px;border-radius: 8px;height: 77px;margin: 10px 20px;">
+                    <p style="font-family: 'Montserrat';font-style: normal;font-weight: 600;font-size: 24px;line-height: 29px;color: #000000;">Lớp MTW0027 </p>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="<%= 'courses-header' if current_page?('/courses') %>" style="display:none">
+              <div style="display: flex;justify-content: space-between; padding: 20px 20px 15px 20px;background: white;">
+                  <div></div>
+                  <div>
+                      <div  class="menu-item ic-app-header__menu-list-item <%= 'ic-app-header__menu-list-item--active' if active_path?('/profile') %>">
+                        <button id="global_nav_profile_link" class="ic-app-header__menu-list-link" style="display: flex;align-items: center;">
+                          <div class="menu-item-icon-container" style="margin: 0;">
+                            <div aria-hidden="true" class="fs-exclude ic-avatar <% if @real_current_user && @real_current_user != @current_user %>ic-avatar--fake-student<% end %>">
+                              <img src="<%= @current_user.try { |usr| avatar_image_attrs(usr).first } %>" alt="<%= @current_user.short_name %>" />
+                            </div>
+                            <span class="menu-item__badge"></span>
+                        </div>
+                        <div style="margin-left: 10px;">
+                          <div class="menu-item__text" style="color: #232D42;font-size: 16px;">
+                            <%= t('Austin Robertson') %>
+                          </div>
+                          <div class="menu-item__text" style="color: #8A92A6;font-size: 12px;">
+                            <%= t('Marketing Administrator') %>
+                          </div>
+                        </div>
+                        
+                      </button>
+                    </div>
+                </div>
+              </div>
+              <div style=" background:#E9ECEF;">
+                <div style="padding-left: 20px;margin-bottom: 80px;position: relative;background: radial-gradient(36.28% 150.93% at 50% 50%, #3B8AFF 0%, #0048B3 100%);border-radius: 0px 0px 16px 16px;height:162px">
+                 
+                </div>
+              </div>
+            </div>
+            <div class="<%= 'courses-header' if current_page?('/') %>" style="display:none">
+              <div style="display: flex;justify-content: space-between; padding: 20px 20px 15px 20px;background: white;">
+                  <div></div>
+                  <div>
+                      <div  class="menu-item ic-app-header__menu-list-item <%= 'ic-app-header__menu-list-item--active' if active_path?('/profile') %>">
+                        <button id="global_nav_profile_link" class="ic-app-header__menu-list-link" style="display: flex;align-items: center;">
+                          <div class="menu-item-icon-container" style="margin: 0;">
+                            <div aria-hidden="true" class="fs-exclude ic-avatar <% if @real_current_user && @real_current_user != @current_user %>ic-avatar--fake-student<% end %>">
+                              <img src="<%= @current_user.try { |usr| avatar_image_attrs(usr).first } %>" alt="<%= @current_user.short_name %>" />
+                            </div>
+                            <span class="menu-item__badge"></span>
+                        </div>
+                        <div style="margin-left: 10px;">
+                          <div class="menu-item__text" style="color: #232D42;font-size: 16px;">
+                            <%= t('Austin Robertson') %>
+                          </div>
+                          <div class="menu-item__text" style="color: #8A92A6;font-size: 12px;">
+                            <%= t('Marketing Administrator') %>
+                          </div>
+                        </div>
+                        
+                      </button>
+                    </div>
+                </div>
+              </div>
+              <div style=" background:#E9ECEF;">
+                <div style="padding-left: 20px;margin-bottom: 80px;position: relative;background: radial-gradient(36.28% 150.93% at 50% 50%, #3B8AFF 0%, #0048B3 100%);border-radius: 0px 0px 16px 16px;height:162px">
+                  <div style="height: 105px;"></div>
+                  <div class="ic-Action-header content--hasMarginTop" style="background: white;margin-right: 25px;margin-left: 10px;border-radius: 10px;">
+    
+                      <div  style="display: flex;background: white;align-items: center;padding-left: 24px;border-radius: 8px;height: 77px;margin: 10px 30px 10px 20px;">
+                    <p style="font-family: 'Montserrat';font-style: normal;font-weight: 600;font-size: 24px;line-height: 29px;margin-right: 44px;">Tất cả khóa học</p>
+                    <div style="position: relative;margin-left: 20px;align-items: center;display: flex;width: 377px;height: 42px;flex:1;">
+                      <img style="position: absolute; top: 13px;width: 16px;left: 13px;" src="/images/Search.png"/>
+                      <input aria-describedby="forgot_password_instructions" placeholder="Tìm kiếm..." style ="border: 1px solid #6B6B6B;font-size: 16px;height: 40px;padding: 5px 0 5px 35px;" class="ic-Input email_address text" type="text" name="pseudonym_session[unique_id_forgot]" value="" id="pseudonym_session_unique_id_forgot" />
+                    </div>
+        </div>
+        <div style="display: flex;justify-content: center;align-items: center;gap: 30px;">
+          <div class="ic-Action-header__Secondary">
+          <% if @domain_root_account.enable_course_catalog? %>
+            <%= link_to t('browse_more_courses', 'Browse More Courses'), "/search/all_courses/", class:"Button" %>
+          <% end %>
+
+          <% if show_user_create_course_button(@current_user) %>
+              <button  style=" width: 100%; background: #0249b3; color: white;border-radius: 10px;display: flex;align-items: center;justify-content: center;height: 55px;gap: 5px;font-family: 'Montserrat';font-style: normal;font-weight: 700;font-size: 16px;line-height: 20px;" type="button"
+                      id="start_new_course"
+                      class="Button element_toggler"
+                      aria-controls="new_course_form"
+              >
+                      <%= "Tạo khóa học" %>
+                      <i class="icon-plus"></i> 
+              </button>
+              <% if k5_user? || @domain_root_account.feature_enabled?(:create_course_subaccount_picker) %>
+                <div id="create_subject_modal_container"></div>
+              <% else %>
+                <%= render :partial => 'shared/new_course_form' %>
+              <% end %>
+          <% end %> 
+          
+        </div>
+        <a href="/courses" style="margin-right: 30px;">
+                          <div style="height: 20px;width: 20px;">
+                            <img src="/images/menu_courses.png"/>
+                          </div>
+        </a>
+        </div>
+   
+  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+            <div>
+            
             <%= yield %>
           </div>
         </div>
-        <div id="right-side-wrapper" class="ic-app-main-content__secondary">
-          <aside id="right-side" role="complementary">
+        <div id="right-side-wrapper" class="ic-app-main-content__secondary <%= 'display_none' if current_page?('/') %>  <%= 'ml-257' if current_page?('/calendar') %>">
+          <aside class="  <%= 'right-side' if current_page?('/calendar') %>" id="right-side" role="complementary">
             <%= right_side %>
           </aside>
-        </div>
+        </div> 
+       
       </div>
     </div>
     <% if @show_footer %>
       <%= render :partial => 'shared/canvas_footer' %>
     <% end %>
   </div>
+
 
   <% if @show_embedded_chat %>
     <%= render :partial => 'shared/embedded_chat' %>
@@ -276,5 +569,6 @@
   <% end %>
   <%= render :partial => 'layouts/foot', :locals => { :include_common_bundle => true } %>
 </div> <!-- #application -->
+
 </body>
 </html>

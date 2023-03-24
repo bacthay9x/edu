@@ -25,31 +25,32 @@
 # from their use, making things harder to find
 
 begin
-  require "byebug"
+  require 'byebug'
 rescue LoadError
   nil
 end
 
-require "crystalball"
+require 'crystalball'
 
-ENV["RAILS_ENV"] = "test"
+ENV['RAILS_ENV'] = 'test'
 
 # SimpleCov needs to be added first thing in the spec_helper.rb
 # No other configurations should be loaded/performed before this block
-if ENV["COVERAGE"] == "1" && (ENV["SUPPRESS_OUTPUT"] != "1")
-  require_relative("canvas_simplecov")
-  require_relative("coverage_tool")
-  puts "Code Coverage enabled" unless ENV["SUPPRESS_OUTPUT"] == "1"
-  CoverageTool.start("RSpec")
+if ENV['COVERAGE'] == '1' && (ENV['SUPPRESS_OUTPUT'] != '1')
+  require_relative('canvas_simplecov')
+  require_relative('coverage_tool')
+  puts 'Code Coverage enabled' unless ENV['SUPPRESS_OUTPUT'] == '1'
+  CoverageTool.start('RSpec')
 end
 
-if ENV["CRYSTALBALL_MAP"] == "1"
-  require_relative("support/crystalball")
+if ENV['CRYSTALBALL_MAP'] == '1'
+  require_relative('support/crystalball')
 
   Coverage.start unless Coverage.running?
   Crystalball::MapGenerator.start! do |config|
     config.register Crystalball::MapGenerator::CoverageStrategy.new
-    config.map_storage_path = "log/results/crystalball_results/#{SecureRandom.uuid}_#{ENV.fetch("PARALLEL_INDEX", "0")}_map.yml"
+    config.map_storage_path =
+      "log/results/crystalball_results/#{SecureRandom.uuid}_#{ENV.fetch('PARALLEL_INDEX', '0')}_map.yml"
     config.dump_threshold = 50_000
   end
 
@@ -67,9 +68,11 @@ if ENV["CRYSTALBALL_MAP"] == "1"
           after = Coverage.peek_result
           example_map.push(*execution_detector.detect(before, after).sort)
 
-          if example.metadata[:location].include?("selenium")
+          if example.metadata[:location].include?('selenium')
             # rubocop:disable Specs/NoExecuteScript
-            js_coverage = ::SeleniumDriverSetup.driver.execute_script("return window.__coverage__")&.keys&.uniq
+            js_coverage =
+              ::SeleniumDriverSetup.driver.execute_script('return window.__coverage__')&.keys&.uniq
+
             # rubocop:enable Specs/NoExecuteScript
             example_map.used_files.concat(js_coverage.sort) if js_coverage
           end
@@ -79,12 +82,12 @@ if ENV["CRYSTALBALL_MAP"] == "1"
   end
 end
 
-require_relative "../config/environment"
+require_relative '../config/environment'
 
-require "rspec/rails"
+require 'rspec/rails'
 
-require "webmock"
-require "webmock/rspec/matchers"
+require 'webmock'
+require 'webmock/rspec/matchers'
 WebMock.allow_net_connect!
 WebMock.enable!
 # unlike webmock/rspec, only reset in groups that actually do stubbing
@@ -96,21 +99,21 @@ module WebMock::API
   end
 end
 
-require "delayed/testing"
-Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
-require "sharding_spec_helper"
+require 'delayed/testing'
+Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
+require 'sharding_spec_helper'
 
 # nuke the db (say, if `rake db:migrate RAILS_ENV=test` created records),
 # and then ensure people aren't creating records outside the rspec
 # lifecycle, e.g. inside a describe/context block rather than a
 # let/before/example
-TestDatabaseUtils.reset_database! unless ENV["DB_VALIDITY_ENSURED"] == "1"
-TestDatabaseUtils.check_migrations! unless ENV["DB_VALIDITY_ENSURED"] == "1"
+TestDatabaseUtils.reset_database! unless ENV['DB_VALIDITY_ENSURED'] == '1'
+TestDatabaseUtils.check_migrations! unless ENV['DB_VALIDITY_ENSURED'] == '1'
 BlankSlateProtection.install!
 GreatExpectations.install!
 
 ActionView::TestCase::TestController.view_paths = ApplicationController.view_paths
-ActionView::Base.streaming_completion_on_exception = "</html>"
+ActionView::Base.streaming_completion_on_exception = '</html>'
 
 # this makes sure that a broken transaction becomes functional again
 # by the time we hit rescue_action_in_public, so that the error report
@@ -123,27 +126,34 @@ module SpecTransactionWrapper
     rescue ActiveRecord::StatementInvalid
       # these need to properly roll back the transaction
       raise
-    rescue
+    rescue StandardError
       # anything else, the transaction needs to commit, but we need to re-raise outside the transaction
       exception = $!
     end
     raise exception if exception
   end
 end
-ActionController::Base.set_callback(:process_action, :around,
-                                    ->(_r, block) { SpecTransactionWrapper.wrap_block_in_transaction(block) })
+ActionController::Base.set_callback(
+  :process_action,
+  :around,
+  ->(_r, block) { SpecTransactionWrapper.wrap_block_in_transaction(block) }
+)
 
-ActionController::Base.set_callback(:process_action, :before,
-                                    ->(_r) { @streaming_template = false })
+ActionController::Base.set_callback(
+  :process_action,
+  :before,
+  ->(_r) { @streaming_template = false }
+)
 
 module RSpec::Core::Hooks
   class AfterContextHook < Hook
     def run(example)
-      exception_class = if defined?(RSpec::Support::AllExceptionsExceptOnesWeMustNotRescue)
-                          RSpec::Support::AllExceptionsExceptOnesWeMustNotRescue
-                        else
-                          Exception
-                        end
+      exception_class =
+        if defined?(RSpec::Support::AllExceptionsExceptOnesWeMustNotRescue)
+          RSpec::Support::AllExceptionsExceptOnesWeMustNotRescue
+        else
+          Exception
+        end
       example.instance_exec(example, &block)
     rescue exception_class => e
       # TODO: Come up with a better solution for this.
@@ -175,24 +185,22 @@ module ActionView::TestCase::Behavior
     if is_a?(RSpec::Rails::HelperExampleGroup)
       # the original implementation. we can't call super because
       # we replaced the whole original method
-      return _user_defined_ivars.map do |ivar|
-        [ivar[1..].to_sym, instance_variable_get(ivar)]
-      end.to_h
+      return _user_defined_ivars.map { |ivar| [ivar[1..].to_sym, instance_variable_get(ivar)] }.to_h
     end
     {}
   end
 end
 
-if ENV["ENABLE_AXE_SELENIUM"] == "1"
-  require "stormbreaker"
+if ENV['ENABLE_AXE_SELENIUM'] == '1'
+  require 'stormbreaker'
   Stormbreaker.install!
   Stormbreaker.configure do |config|
     config.driver = -> { SeleniumDriverSetup.driver }
     config.skip = [:"color-contrast", :"duplicate-id"]
     config.rules = %i[wcag2a wcag2aa section508]
-    if ENV["RSPEC_PROCESSES"]
+    if ENV['RSPEC_PROCESSES']
       config.serialize_output = true
-      config.serialize_prefix = "log/results/stormbreaker_results"
+      config.serialize_prefix = 'log/results/stormbreaker_results'
     end
   end
 end
@@ -205,15 +213,13 @@ module RSpec::Rails
   end
 
   RSpec::Matchers.define :have_tag do |expected|
-    match do |actual|
-      !!Nokogiri::HTML5(actual).at_css(expected)
-    end
+    match { |actual| !!Nokogiri.HTML5(actual).at_css(expected) }
   end
 
   RSpec::Matchers.define :be_checked do
     match do |node|
       if node.is_a?(Nokogiri::XML::Element)
-        node.attr("checked") == "checked"
+        node.attr('checked') == 'checked'
       elsif node.respond_to?(:checked?)
         node.checked?
       end
@@ -223,26 +229,29 @@ end
 
 module ReadOnlySecondaryStub
   def self.reset
-    ActiveRecord::Base.connection.execute("RESET ROLE")
+    ActiveRecord::Base.connection.execute('RESET ROLE')
     Thread.current[:stubbed_guard_rail_env] = nil
   end
 
   def datbase_username
-    Rails.configuration.database_configuration.dig("test", "username") ||
-      `whoami`.strip
+    Rails.configuration.database_configuration.dig('test', 'username') || `whoami`.strip
   end
 
   def readonly_user_exists?
     return @read_only_user if instance_variable_defined?(:@read_only_user)
 
-    @read_only_user = !!ActiveRecord::Base.connection.select_value("SELECT 1 AS one FROM pg_roles WHERE pg_roles.rolname='canvas_readonly_user'")
+    @read_only_user =
+      !!ActiveRecord::Base.connection.select_value(
+        "SELECT 1 AS one FROM pg_roles WHERE pg_roles.rolname='canvas_readonly_user'"
+      )
   end
 
   def readonly_user_can_read?
     return @literate if instance_variable_defined?(:@literate)
 
-    sql = "SELECT privilege_type FROM information_schema.table_privileges WHERE grantee ='canvas_readonly_user' AND table_name = 'courses'"
-    @literate = ActiveRecord::Base.connection.select_values(sql).include?("SELECT")
+    sql =
+      "SELECT privilege_type FROM information_schema.table_privileges WHERE grantee ='canvas_readonly_user' AND table_name = 'courses'"
+    @literate = ActiveRecord::Base.connection.select_values(sql).include?('SELECT')
   end
 
   def test_db_name
@@ -251,7 +260,9 @@ module ReadOnlySecondaryStub
 
   def switch_role!(env)
     if readonly_user_exists? && readonly_user_can_read?
-      ActiveRecord::Base.connection.execute(env == :secondary ? "SET ROLE canvas_readonly_user" : "RESET ROLE")
+      ActiveRecord::Base.connection.execute(
+        env == :secondary ? 'SET ROLE canvas_readonly_user' : 'RESET ROLE'
+      )
     else
       puts "The database #{test_db_name} is not setup with a secondary/readonly_user to fix run the following."
       puts "psql -c 'ALTER USER #{datbase_username} CREATEDB CREATEROLE' -d #{test_db_name}"
@@ -266,7 +277,7 @@ module ReadOnlySecondaryStub
 
   def activate(env)
     return super if environment == :deploy
-    return super unless [:primary, :secondary].include?(env)
+    return super unless %i[primary secondary].include?(env)
 
     previous_stub = Thread.current[:stubbed_guard_rail_env]
     previous_env = previous_stub || :primary
@@ -286,9 +297,7 @@ GuardRail.singleton_class.prepend ReadOnlySecondaryStub
 
 module ForceTransactionCommitCallbacksToPrimary
   def commit_records
-    GuardRail.activate(:primary) do
-      super
-    end
+    GuardRail.activate(:primary) { super }
   end
 end
 ActiveRecord::ConnectionAdapters::Transaction.prepend ForceTransactionCommitCallbacksToPrimary
@@ -301,9 +310,17 @@ module RenderWithHelpers
   end
 
   def render(*args)
-    controller_class = ("#{@controller.controller_path.camelize}Controller".constantize rescue nil) || ApplicationController
+    controller_class =
+      (
+        begin
+          "#{@controller.controller_path.camelize}Controller".constantize
+        rescue StandardError
+          nil
+        end
+      ) || ApplicationController
 
     controller_class.instance_variable_set(:@js_env, nil)
+
     # this extends the controller's helper methods to the view
     # however, these methods are delegated to the test controller
     view.singleton_class.class_eval do
@@ -315,13 +332,11 @@ module RenderWithHelpers
     @controller.singleton_class.class_eval do
       attr_accessor :real_controller
 
-      controller_class._helper_methods.each do |helper|
-        class_eval <<~RUBY, __FILE__, __LINE__ + 1
+      controller_class._helper_methods.each { |helper| class_eval <<~RUBY, __FILE__, __LINE__ + 1 }
           def #{helper}(*args, &block)
             real_controller.send(:#{helper}, *args, &block)
           end
         RUBY
-      end
     end
 
     real_controller = controller_class.new
@@ -345,13 +360,13 @@ module RenderWithHelpers
 end
 RSpec::Rails::ViewExampleGroup::ExampleMethods.prepend(RenderWithHelpers)
 
-require "rspec_mock_extensions"
-require "ams_spec_helper"
+require 'rspec_mock_extensions'
+require 'ams_spec_helper'
 
-require "i18n_tasks"
-require "factories"
+require 'i18n_tasks'
+require 'factories'
 
-Dir[File.dirname(__FILE__) + "/shared_examples/**/*.rb"].sort.each { |f| require f }
+Dir[File.dirname(__FILE__) + '/shared_examples/**/*.rb'].sort.each { |f| require f }
 
 # rspec aliases :describe to :context in a way that it's pretty much defined
 # globally on every object. :context is already heavily used in our application,
@@ -385,8 +400,7 @@ module Helpers
       assert_status(401)
     else
       # Certain responses require more privileges than the current user has (ie site admin)
-      expect(response).to redirect_to(login_url)
-        .or redirect_to(root_url)
+      expect(response).to redirect_to(login_url).or redirect_to(root_url)
     end
   end
 
@@ -401,36 +415,41 @@ module Helpers
 
   def assert_require_login
     expect(response).to be_redirect
-    expect(flash[:warning]).to eq "You must be logged in to access this page"
+    expect(flash[:warning]).to eq 'You must be logged in to access this page'
   end
 end
 
 RSpec::Expectations.configuration.on_potential_false_positives = :raise
 
-require "rspec_junit_formatter"
+require 'rspec_junit_formatter'
 
 RSpec.configure do |config|
-  config.example_status_persistence_file_path = Rails.root.join("tmp/rspec#{ENV.fetch("PARALLEL_INDEX", "0").to_i}")
+  config.example_status_persistence_file_path =
+    Rails.root.join("tmp/rspec#{ENV.fetch('PARALLEL_INDEX', '0').to_i}")
   config.fail_if_no_examples = true
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures = false
-  config.fixture_path = Rails.root.join("spec/fixtures")
+  config.fixture_path = Rails.root.join('spec/fixtures')
   config.infer_spec_type_from_file_location!
   config.raise_errors_for_deprecations!
   config.color = true
   config.order = :random
 
   # The Pact specs have prerequisite setup steps so we exclude them by default
-  config.filter_run_excluding :pact_live_events if ENV.fetch("RUN_LIVE_EVENTS_CONTRACT_TESTS", "0") == "0"
+  if ENV.fetch('RUN_LIVE_EVENTS_CONTRACT_TESTS', '0') == '0'
+    config.filter_run_excluding :pact_live_events
+  end
 
-  if ENV["CRYSTALBALL_MAP"] == "1"
+  if ENV['CRYSTALBALL_MAP'] == '1'
     config.filter_run_excluding :pact_live_events
     config.filter_run_excluding :pact
   end
 
   # The Pact build needs RspecJunitFormatter and does not run RSpecQ
-  file = "log/results/results-#{ENV.fetch("PARALLEL_INDEX", "0").to_i}.xml"
-  config.add_formatter "RspecJunitFormatter", file if (ENV["PACT_BROKER"] && ENV["JENKINS_HOME"]) || ENV["CRYSTALBALL_MAP"] == "1"
+  file = "log/results/results-#{ENV.fetch('PARALLEL_INDEX', '0').to_i}.xml"
+  if (ENV['PACT_BROKER'] && ENV['JENKINS_HOME']) || ENV['CRYSTALBALL_MAP'] == '1'
+    config.add_formatter 'RspecJunitFormatter', file
+  end
 
   config.include Helpers
   config.include Factories
@@ -438,30 +457,27 @@ RSpec.configure do |config|
   config.include Onceler::BasicHelpers
   config.include PGCollkeyHelper
   config.include ActionDispatch::TestProcess::FixtureFile
-  config.project_source_dirs << "gems" # so that failures here are reported properly
+  config.project_source_dirs << 'gems' # so that failures here are reported properly
 
-  if ENV["RSPEC_LOG"]
-    config.add_formatter "ParallelTests::RSpec::RuntimeLogger", "log/parallel_runtime/parallel_runtime_rspec_tests-#{ENV.fetch("PARALLEL_INDEX", "0").to_i}.log"
+  if ENV['RSPEC_LOG']
+    config.add_formatter 'ParallelTests::RSpec::RuntimeLogger',
+                         "log/parallel_runtime/parallel_runtime_rspec_tests-#{ENV.fetch('PARALLEL_INDEX', '0').to_i}.log"
   end
 
-  if ENV["RAILS_LOAD_ALL_LOCALES"] && RSpec.configuration.filter.rules[:i18n]
-    config.around do |example|
-      SpecMultipleLocales.run(example)
-    end
+  if ENV['RAILS_LOAD_ALL_LOCALES'] && RSpec.configuration.filter.rules[:i18n]
+    config.around { |example| SpecMultipleLocales.run(example) }
   end
 
   config.around do |example|
     Rails.logger.info "STARTING SPEC #{example.full_description}"
-    SpecTimeLimit.enforce(example) do
-      example.run
-    end
+    SpecTimeLimit.enforce(example) { example.run }
   end
 
   def reset_all_the_things!
     LocalCache.reset
     ReadOnlySecondaryStub.reset
     I18n.locale = :en
-    Time.zone = "UTC"
+    Time.zone = 'UTC'
     LoadAccount.force_special_account_reload = true
     Account.clear_special_account_cache!(true)
     PluginSetting.current_account = nil
@@ -489,10 +505,10 @@ RSpec.configure do |config|
   end
 
   # UTC for tests, cuz it's easier :P
-  Account.time_zone_attribute_defaults[:default_time_zone] = "UTC"
+  Account.time_zone_attribute_defaults[:default_time_zone] = 'UTC'
 
   config.before :all do
-    raise "all specs need to use transactions" unless using_transactions_properly?
+    raise 'all specs need to use transactions' unless using_transactions_properly?
   end
 
   Onceler.configure do |c|
@@ -502,7 +518,7 @@ RSpec.configure do |config|
   end
 
   config.before do
-    raise "all specs need to use transactions" unless using_transactions_properly?
+    raise 'all specs need to use transactions' unless using_transactions_properly?
 
     reset_all_the_things!
   end
@@ -515,7 +531,7 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
-    if ENV["COVERAGE"] == "1"
+    if ENV['COVERAGE'] == '1'
       simple_cov_cmd = "rspec:#{Process.pid}"
       puts "Starting SimpleCov command: #{simple_cov_cmd}"
       SimpleCov.command_name(simple_cov_cmd)
@@ -565,13 +581,15 @@ RSpec.configure do |config|
   # Please see spec/factories for examples!
   # ****************************************************************
 
-  def login_as(username = "nobody@example.com", password = "asdfasdf")
-    post "/login/canvas",
-         params: { "pseudonym_session[unique_id]" => username,
-                   "pseudonym_session[password]" => password }
+  def login_as(username = 'nobody@example.com', password = 'asdfasdf')
+    post '/login/canvas',
+         params: {
+           'pseudonym_session[unique_id]' => username,
+           'pseudonym_session[password]' => password
+         }
     follow_redirect! while response.redirect?
     assert_response :success
-    expect(request.fullpath).to eq "/?login_success=1"
+    expect(request.fullpath).to eq '/?login_success=1'
   end
 
   # Instead of directly comparing urls
@@ -593,17 +611,19 @@ RSpec.configure do |config|
   end
 
   def assert_hash_contains(test_hash, expected_hash)
-    expected_hash.each do |key, expected_value|
-      expect(test_hash[key]).to eq expected_value
-    end
+    expected_hash.each { |key, expected_value| expect(test_hash[key]).to eq expected_value }
   end
 
   def fixture_file_upload(path, mime_type = nil, binary = false)
-    Rack::Test::UploadedFile.new(File.join(RSpec.configuration.fixture_path, path), mime_type, binary)
+    Rack::Test::UploadedFile.new(
+      File.join(RSpec.configuration.fixture_path, path),
+      mime_type,
+      binary
+    )
   end
 
   def default_uploaded_data
-    fixture_file_upload("docs/doc.doc", "application/msword", true)
+    fixture_file_upload('docs/doc.doc', 'application/msword', true)
   end
 
   def create_temp_dir!
@@ -614,10 +634,10 @@ RSpec.configure do |config|
   end
 
   def generate_csv_file(lines)
-    tmp = Tempfile.new("sis_rspec")
+    tmp = Tempfile.new('sis_rspec')
     path = "#{tmp.path}.csv"
     tmp.close!
-    File.open(path, "w+") { |f| f.puts lines.flatten.join "\n" }
+    File.open(path, 'w+') { |f| f.puts lines.flatten.join "\n" }
     path
   end
 
@@ -652,7 +672,7 @@ RSpec.configure do |config|
       if Canvas::Redis.redis_enabled?
         cache_opts[:redis] = Canvas::Redis.redis
       else
-        skip "redis required"
+        skip 'redis required'
       end
     elsif new_cache == :memory_store
       cache_opts[:coder] = Marshal
@@ -668,9 +688,7 @@ RSpec.configure do |config|
   end
 
   def specs_require_cache(new_cache = :memory_store)
-    before do
-      set_cache(new_cache)
-    end
+    before { set_cache(new_cache) }
   end
 
   def enable_cache(new_cache = :memory_store)
@@ -684,9 +702,15 @@ RSpec.configure do |config|
       ensure
         allow(Rails).to receive(:cache).and_return(previous_cache)
         allow(ActionController::Base).to receive(:cache_store).and_return(previous_cache)
-        allow_any_instance_of(ActionController::Base).to receive(:cache_store).and_return(previous_cache)
-        allow(ActionController::Base).to receive(:perform_caching).and_return(previous_perform_caching)
-        allow_any_instance_of(ActionController::Base).to receive(:perform_caching).and_return(previous_perform_caching)
+        allow_any_instance_of(ActionController::Base).to receive(:cache_store).and_return(
+          previous_cache
+        )
+        allow(ActionController::Base).to receive(:perform_caching).and_return(
+          previous_perform_caching
+        )
+        allow_any_instance_of(ActionController::Base).to receive(:perform_caching).and_return(
+          previous_perform_caching
+        )
         allow(MultiCache).to receive(:cache).and_return(previous_multicache)
       end
     end
@@ -696,31 +720,36 @@ RSpec.configure do |config|
   def enable_forgery_protection(enable = true)
     old_value = ActionController::Base.allow_forgery_protection
     allow(ActionController::Base).to receive(:allow_forgery_protection).and_return(enable)
-    allow_any_instance_of(ActionController::Base).to receive(:allow_forgery_protection).and_return(enable)
+    allow_any_instance_of(ActionController::Base).to receive(:allow_forgery_protection).and_return(
+      enable
+    )
 
     yield if block_given?
   ensure
     if block_given?
       allow(ActionController::Base).to receive(:allow_forgery_protection).and_return(old_value)
-      allow_any_instance_of(ActionController::Base).to receive(:allow_forgery_protection).and_return(old_value)
+      allow_any_instance_of(ActionController::Base).to receive(:allow_forgery_protection)
+        .and_return(old_value)
     end
   end
 
   def stub_kaltura
     # trick kaltura into being activated
-    allow(CanvasKaltura.plugin_settings).to receive(:settings).and_return({
-                                                                            "domain" => "kaltura.example.com",
-                                                                            "resource_domain" => "cdn.kaltura.example.com",
-                                                                            "rtmp_domain" => "rtmp.kaltura.example.com",
-                                                                            "partner_id" => "100",
-                                                                            "subpartner_id" => "10000",
-                                                                            "secret_key" => "fenwl1n23k4123lk4hl321jh4kl321j4kl32j14kl321",
-                                                                            "user_secret_key" => "1234821hrj3k21hjk4j3kl21j4kl321j4kl3j21kl4j3k2l1",
-                                                                            "player_ui_conf" => "1",
-                                                                            "kcw_ui_conf" => "1",
-                                                                            "upload_ui_conf" => "1",
-                                                                            "hide_rte_button" => false
-                                                                          })
+    allow(CanvasKaltura.plugin_settings).to receive(:settings).and_return(
+      {
+        'domain' => 'kaltura.example.com',
+        'resource_domain' => 'cdn.kaltura.example.com',
+        'rtmp_domain' => 'rtmp.kaltura.example.com',
+        'partner_id' => '100',
+        'subpartner_id' => '10000',
+        'secret_key' => 'fenwl1n23k4123lk4hl321jh4kl321j4kl32j14kl321',
+        'user_secret_key' => '1234821hrj3k21hjk4j3kl21j4kl321j4kl3j21kl4j3k2l1',
+        'player_ui_conf' => '1',
+        'kcw_ui_conf' => '1',
+        'upload_ui_conf' => '1',
+        'hide_rte_button' => false
+      }
+    )
   end
 
   def override_dynamic_settings(data)
@@ -737,7 +766,10 @@ RSpec.configure do |config|
 
   # inspired by http://blog.jayfields.com/2007/08/ruby-calling-methods-of-specific.html
   module AttachmentStorageSwitcher
-    BACKENDS = %w[FileSystem S3].map { |backend| AttachmentFu::Backends.const_get(:"#{backend}Backend") }.freeze
+    BACKENDS =
+      %w[FileSystem S3].map do |backend|
+        AttachmentFu::Backends.const_get(:"#{backend}Backend")
+      end.freeze
 
     class As # :nodoc:
       private(*instance_methods.grep_v(/(^__|^\W|^binding$|^untaint$)/))
@@ -760,27 +792,32 @@ RSpec.configure do |config|
       BACKENDS.each do |backend|
         base.send(:include, backend) unless base.ancestors.include?(backend)
       end
+
       # remove the duplicate callbacks added by multiple backends
       base.before_update.uniq!
 
-      BACKENDS.map(&:instance_methods).flatten.uniq.each do |method|
-        # overridden by Attachment anyway; don't re-overwrite it
-        next if base.instance_method(method).owner == base
+      BACKENDS
+        .map(&:instance_methods)
+        .flatten
+        .uniq
+        .each do |method|
+          # overridden by Attachment anyway; don't re-overwrite it
+          next if base.instance_method(method).owner == base
 
-        if method.to_s[-1..] == "="
-          base.class_eval <<~RUBY, __FILE__, __LINE__ + 1
+          if method.to_s[-1..] == '='
+            base.class_eval <<~RUBY, __FILE__, __LINE__ + 1
             def #{method}(arg)
               self.as(self.class.current_backend).#{method} arg
             end
           RUBY
-        else
-          base.class_eval <<~RUBY, __FILE__, __LINE__ + 1
+          else
+            base.class_eval <<~RUBY, __FILE__, __LINE__ + 1
             def #{method}(*args, &block)
               self.as(self.class.current_backend).#{method}(*args, &block)
             end
           RUBY
+          end
         end
-      end
     end
 
     def as(ancestor)
@@ -794,11 +831,11 @@ RSpec.configure do |config|
 
   module StubS3
     AWS_CONFIG = {
-      access_key_id: "stub_id",
-      secret_access_key: "stub_key",
-      region: "us-east-1",
+      access_key_id: 'stub_id',
+      secret_access_key: 'stub_key',
+      region: 'us-east-1',
       stub_responses: true,
-      bucket_name: "no-bucket"
+      bucket_name: 'no-bucket'
     }.freeze
 
     def self.stubbed?
@@ -806,7 +843,7 @@ RSpec.configure do |config|
     end
 
     def load(file, *args)
-      return AWS_CONFIG.dup if StubS3.stubbed? && file == "amazon_s3"
+      return AWS_CONFIG.dup if StubS3.stubbed? && file == 'amazon_s3'
 
       super
     end
@@ -814,7 +851,9 @@ RSpec.configure do |config|
 
   def s3_storage!(opts = { stubs: true })
     [Attachment, Thumbnail].each do |model|
-      model.include(AttachmentStorageSwitcher) unless model.ancestors.include?(AttachmentStorageSwitcher)
+      unless model.ancestors.include?(AttachmentStorageSwitcher)
+        model.include(AttachmentStorageSwitcher)
+      end
       allow(model).to receive(:current_backend).and_return(AttachmentFu::Backends::S3Backend)
 
       allow(model).to receive(:s3_storage?).and_return(true)
@@ -824,15 +863,19 @@ RSpec.configure do |config|
     if opts[:stubs]
       ConfigFile.singleton_class.prepend(StubS3)
       allow(StubS3).to receive(:stubbed?).and_return(true)
-    elsif Attachment.s3_config.blank? || Attachment.s3_config[:access_key_id] == "access_key"
-      skip "Please put valid S3 credentials in config/amazon_s3.yml"
+    elsif Attachment.s3_config.blank? || Attachment.s3_config[:access_key_id] == 'access_key'
+      skip 'Please put valid S3 credentials in config/amazon_s3.yml'
     end
   end
 
   def local_storage!
     [Attachment, Thumbnail].each do |model|
-      model.include(AttachmentStorageSwitcher) unless model.ancestors.include?(AttachmentStorageSwitcher)
-      allow(model).to receive(:current_backend).and_return(AttachmentFu::Backends::FileSystemBackend)
+      unless model.ancestors.include?(AttachmentStorageSwitcher)
+        model.include(AttachmentStorageSwitcher)
+      end
+      allow(model).to receive(:current_backend).and_return(
+        AttachmentFu::Backends::FileSystemBackend
+      )
 
       allow(model).to receive(:s3_storage?).and_return(false)
       allow(model).to receive(:local_storage?).and_return(true)
@@ -861,7 +904,7 @@ RSpec.configure do |config|
   end
 
   def content_type_key
-    "Content-Type"
+    'Content-Type'
   end
 
   class FakeHttpResponse
@@ -887,7 +930,7 @@ RSpec.configure do |config|
     end
 
     def content_type
-      self["content-type"]
+      self['content-type']
     end
   end
 
@@ -920,7 +963,7 @@ RSpec.configure do |config|
   end
 
   def dummy_io
-    fixture_file_upload("docs/doc.doc", "application/msword", true)
+    fixture_file_upload('docs/doc.doc', 'application/msword', true)
   end
 
   def consider_all_requests_local(value)
@@ -932,13 +975,10 @@ RSpec.configure do |config|
   end
 
   def skip_if_prepended_class_method_stubs_broken
-    versions = [
-      "2.4.6",
-      "2.4.9",
-      "2.5.1",
-      "2.5.3"
-    ]
-    skip("stubbing prepended class methods is broken in this version of ruby") if versions.include?(RUBY_VERSION) || RUBY_VERSION >= "2.6"
+    versions = %w[2.4.6 2.4.9 2.5.1 2.5.3]
+    if versions.include?(RUBY_VERSION) || RUBY_VERSION >= '2.6'
+      skip('stubbing prepended class methods is broken in this version of ruby')
+    end
   end
 end
 
@@ -975,7 +1015,9 @@ module I18nStubs
 end
 LazyPresumptuousI18nBackend.prepend(I18nStubs)
 
-Dir[Rails.root.join("{gems,vendor}/plugins/*/spec_canvas/spec_helper.rb")].sort.each { |file| require file }
+Dir[Rails.root.join('{gems,vendor}/plugins/*/spec_canvas/spec_helper.rb')].sort.each do |file|
+  require file
+end
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
@@ -997,7 +1039,7 @@ module DeveloperKeyStubs
       # TODO: we have to do this because tests run in transactions
       testkey = DeveloperKey.where(name: default_key_name).first_or_initialize
       testkey.auto_expire_tokens = false if testkey.new_record?
-      testkey.sns_arn = "arn:aws:s3:us-east-1:12345678910:foo/bar"
+      testkey.sns_arn = 'arn:aws:s3:us-east-1:12345678910:foo/bar'
       testkey.save! if testkey.changed?
       return @special_keys[default_key_name] = testkey
     end
@@ -1006,9 +1048,7 @@ end
 DeveloperKey.singleton_class.prepend DeveloperKeyStubs
 
 def enable_developer_key_account_binding!(developer_key)
-  developer_key.developer_key_account_bindings.first.update!(
-    workflow_state: "on"
-  )
+  developer_key.developer_key_account_bindings.first.update!(workflow_state: 'on')
 end
 
 def enable_default_developer_key!

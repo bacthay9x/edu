@@ -14,11 +14,11 @@ CANVAS_SKIP_DOCKER_USERMOD='true'
 
 _canvas_lms_opt_in_telemetry "$SCRIPT_NAME" "$LOG"
 
-if [[ "$USER" == 'root' ]]; then
-  echo 'Please do not run this script as root!'
-  echo "I'll ask for your sudo password if I need it."
-  exit 1
-fi
+#if [[ "$USER" == 'root' ]]; then
+#  echo 'Please do not run this script as root!'
+#  echo "I'll ask for your sudo password if I need it."
+#  exit 1
+#fi
 
 print_canvas_intro
 

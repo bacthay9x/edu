@@ -16,6 +16,49 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 %>
 
+<style>
+  .ic-Action-header.content--hasMarginTop {
+    background: white !important;
+    margin-top: -125px;
+    position: absolute;
+    width: 95%;
+    margin-left: 35px;
+    margin-right: 35px;
+    border-radius: 5px;
+  }
+  .ic-Action-header__Secondary {
+    width: 190px;
+  }
+
+  .ic-Action-header__Secondary button {
+    width: 100%;
+    background: #0249b3;
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 55px;
+    gap: 5px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+  }
+  .course-list-table {
+    background: white;
+    border-radius: 5px;
+  }
+
+  .course-list-course-id {
+    width: 10%;
+  }
+  .display_none {
+    display: none;
+  }
+</style>
+
 <%
   if k5_user?
     all_courses_title = t('All Subjects')
@@ -29,7 +72,6 @@
     add_course_aria_label = t('Add a Course')
   end
 %>
-
 <% provide :page_title, courses_title %>
 <% provide_blank :right_side %>
 
@@ -37,138 +79,234 @@
 <% @visible_groups ||= @current_user.visible_groups %>
 
 <% @favorite_course_ids = @current_user.courses_with_primary_enrollment(:favorite_courses).map(&:id) %>
-<% @show_star_column = show_favorites_col_for_index?(:current) %>
-  <div class="header-bar">
-    <h1><%= all_courses_title %></h1>
-  </div>
 
-  <div class="ic-Action-header content--hasMarginTop">
-    <div class="ic-Action-header__Secondary">
-      <% if @domain_root_account.enable_course_catalog? %>
-        <%= link_to t('browse_more_courses', 'Browse More Courses'), "/search/all_courses/", class:"Button" %>
-      <% end %>
+<% @show_star_column =
+show_favorites_col_for_index?(:current) %>
 
-      <% if show_user_create_course_button(@current_user) %>
-          <button type="button"
-                  id="start_new_course"
-                  class="Button element_toggler"
-                  aria-controls="new_course_form"
-                  aria-label="<%= add_course_aria_label %>"
-          >
-                  <i class="icon-plus"></i> <%= course_label %></button>
-          <% if k5_user? || @domain_root_account.feature_enabled?(:create_course_subaccount_picker) %>
-            <div id="create_subject_modal_container"></div>
-          <% else %>
-            <%= render :partial => 'shared/new_course_form' %>
-          <% end %>
-      <% end %>
+<div class="ic-Action-header content--hasMarginTop">
+  <div
+    style="
+      display: flex;
+      background: white;
+      align-items: center;
+      padding-left: 24px;
+      border-radius: 8px;
+      height: 77px;
+      margin: 10px 30px 10px 20px;
+    "
+  >
+    <p
+      style="
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 29px;
+        margin-right: 44px;
+      "
+    >
+      Tất cả khóa học
+    </p>
+    <div
+      style="
+        position: relative;
+        margin-left: 20px;
+        align-items: center;
+        display: flex;
+        width: 377px;
+        height: 42px;
+        flex: 1;
+      "
+    >
+      <img
+        style="position: absolute; top: 13px; width: 16px; left: 13px"
+        src="/images/Search.png"
+      />
+      <input
+        aria-describedby="forgot_password_instructions"
+        placeholder="Tìm kiếm..."
+        style="border: 1px solid #6b6b6b; font-size: 16px; height: 40px; padding: 5px 0 5px 35px"
+        class="ic-Input email_address text"
+        type="text"
+        name="pseudonym_session[unique_id_forgot]"
+        value=""
+        id="pseudonym_session_unique_id_forgot"
+      />
     </div>
   </div>
+  <div style="display: flex; justify-content: center; align-items: center; gap: 30px">
+    <div class="ic-Action-header__Secondary">
+      <% if @domain_root_account.enable_course_catalog? %> <%= link_to t('browse_more_courses',
+      'Browse More Courses'), "/search/all_courses/", class:"Button" %> <% end %> <% if
+      show_user_create_course_button(@current_user) %>
+      <button
+        type="button"
+        id="start_new_course"
+        class="Button element_toggler"
+        aria-controls="new_course_form"
+        aria-label="<%= add_course_aria_label %>"
+      >
+        <%= "Tạo khóa học" %>
+        <i class="icon-plus"></i>
+      </button>
+      <% if k5_user? || @domain_root_account.feature_enabled?(:create_course_subaccount_picker) %>
+      <div id="create_subject_modal_container"></div>
+      <% else %> <%= render :partial => 'shared/new_course_form' %> <% end %> <% end %>
+    </div>
+    <a href="/dashboard" style="margin-right: 30px">
+      <div style="height: 20px; width: 20px">
+        <img src="/images/menu_courses.png" />
+      </div>
+    </a>
+  </div>
+</div>
 
-<% if enrollments_for_index(:current).empty? %>
-  <%= t("You are not enrolled in any courses.") %>
-<% else %>
+<% if enrollments_for_index(:current).empty? %> <%= t("You are not enrolled in any courses.") %> <%
+else %>
+<div id="list_courses" style="padding: 0 35px; background: #e9ecef">
   <table id="my_courses_table" class="ic-Table ic-Table--bordered course-list-table">
-    <thead>
+    <thead style="height: 84px">
       <tr>
-        <% if @show_star_column %><th scope="col" class="course-list-star-column"><span class="screenreader-only"><%= t ('Favorites') %></span></th><% end %>
-        <th scope="col" class="course-list-course-title-column course-list-no-left-border"><%= course_label %></th>
-        <th scope="col" class="course-list-nickname-column course-list-no-left-border"><%= t ('Nickname') %></th>
-        <th scope="col" class="course-list-term-column course-list-no-left-border"><%= t ('Term') %></th>
-        <th scope="col" class="course-list-enrolled-as-column course-list-no-left-border"><%= t ('Enrolled as') %></th>
-        <th scope="col" class="course-list-published-column course-list-no-left-border"><%= t ('Published') %></th>
+        <% if @show_star_column %>
+        <th scope="col" class="course-list-star-column">
+          <span class="screenreader-only"><%= t ('Favorites') %></span>
+        </th>
+        <% end %>
+        <th scope="col" class="course-list-course-id course-list-no-left-border">
+          <%= "Mã khóa học" %>
+        </th>
+        <th scope="col" class="course-list-course-title-column course-list-no-left-border">
+          <%= "Tên khóa học" %>
+        </th>
+        <th scope="col" class="course-list-nickname-column course-list-no-left-border">
+          <%= t ('Biệt danh') %>
+        </th>
+        <th scope="col" class="course-list-term-column course-list-no-left-border">
+          <%= t ('Học kì') %>
+        </th>
+        <th scope="col" class="course-list-enrolled-as-column course-list-no-left-border">
+          <%= t ('Người ghi danh') %>
+        </th>
+        <th scope="col" class="course-list-published-column course-list-no-left-border">
+          <%= t ('Công bố') %>
+        </th>
       </tr>
     </thead>
     <tbody>
-      <% enrollments_for_index(:current).each do |enrollment| %>
-        <%= render :partial => "shared/current_enrollment", :object => enrollment, :locals => { :is_current_term => true } %>
+      <% enrollments_for_index(:current).each do |enrollment| %> <%= render :partial =>
+      "shared/current_enrollment", :object => enrollment, :locals => { :is_current_term => true } %>
       <% end %>
     </tbody>
   </table>
-<% end %>
+</div>
 
-<% @show_star_column = show_favorites_col_for_index?(:past) %>
-<% unless enrollments_for_index(:past).empty? %>
-  <div class="content--hasMarginTop">
-    <h2><%= t('headings.past_enrollments', %{Past Enrollments}) %></h2>
-  </div>
-  <table id="past_enrollments_table" class="ic-Table ic-Table--bordered course-list-table">
-    <thead>
-      <tr>
-        <% if @show_star_column %><th scope="col" class="course-list-star-column"><span class="screenreader-only"><%= t ('Favorites') %></span></th><% end %>
-        <th scope="col" class="course-list-course-title-column course-list-no-left-border"><%= course_label %></th>
-        <th scope="col" class="course-list-nickname-column course-list-no-left-border"><%= t ('Nickname') %></th>
-        <th scope="col" class="course-list-term-column course-list-no-left-border"><%= t ('Term') %></th>
-        <th scope="col" class="course-list-enrolled-as-column course-list-no-left-border"><%= t ('Enrolled as') %></th>
-        <th scope="col" class="course-list-published-column course-list-no-left-border"><%= t ('Published') %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% enrollments_for_index(:past).each do |enrollment| %>
-        <%= render :partial => "shared/current_enrollment", :object => enrollment %>
+
+
+<% end %> <% @show_star_column = show_favorites_col_for_index?(:past) %> <% unless
+enrollments_for_index(:past).empty? %>
+<div class="content--hasMarginTop">
+  <h2><%= t('headings.past_enrollments', %{Past Enrollments}) %></h2>
+</div>
+<table id="past_enrollments_table" class="ic-Table ic-Table--bordered course-list-table">
+  <thead>
+    <tr>
+      <% if @show_star_column %>
+      <th scope="col" class="course-list-star-column">
+        <span class="screenreader-only"><%= t ('Favorites') %></span>
+      </th>
       <% end %>
-    </tbody>
-  </table>
-<% end %>
-
-<% @show_star_column = show_favorites_col_for_index?(:future) %>
-<% unless enrollments_for_index(:future).empty? %>
-  <div class="content--hasMarginTop">
-    <h2><%= t('headings.future_enrollments', 'Future Enrollments') %></h2>
-  </div>
-  <table id="future_enrollments_table" class="ic-Table ic-Table--bordered course-list-table">
-    <thead>
-      <tr>
-        <% if @show_star_column %><th scope="col" class="course-list-star-column"><span class="screenreader-only"><%= t ('Favorites') %></span></th><% end %>
-        <th scope="col" class="course-list-course-title-column course-list-no-left-border"><%= course_label %></th>
-        <th scope="col" class="course-list-nickname-column course-list-no-left-border"><%= t ('Nickname') %></th>
-        <th scope="col" class="course-list-term-column course-list-no-left-border"><%= t ('Term') %></th>
-        <th scope="col" class="course-list-enrolled-as-column course-list-no-left-border"><%= t ('Enrolled as') %></th>
-        <th scope="col" class="course-list-published-column course-list-no-left-border"><%= t ('Published') %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% enrollments_for_index(:future).each do |enrollment| %>
-        <%= render :partial => 'shared/current_enrollment', :object => enrollment %>
+      <th scope="col" class="course-list-course-title-column course-list-no-left-border">
+        <%= course_label %>
+      </th>
+      <th scope="col" class="course-list-nickname-column course-list-no-left-border">
+        <%= t ('Nickname') %>
+      </th>
+      <th scope="col" class="course-list-term-column course-list-no-left-border">
+        <%= t ('Term') %>
+      </th>
+      <th scope="col" class="course-list-enrolled-as-column course-list-no-left-border">
+        <%= t ('Enrolled as') %>
+      </th>
+      <th scope="col" class="course-list-published-column course-list-no-left-border">
+        <%= t ('Published') %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% enrollments_for_index(:past).each do |enrollment| %> <%= render :partial =>
+    "shared/current_enrollment", :object => enrollment %> <% end %>
+  </tbody>
+</table>
+<% end %> <% @show_star_column = show_favorites_col_for_index?(:future) %> <% unless
+enrollments_for_index(:future).empty? %>
+<div class="content--hasMarginTop">
+  <h2><%= t('headings.future_enrollments', 'Future Enrollments') %></h2>
+</div>
+<table id="future_enrollments_table" class="ic-Table ic-Table--bordered course-list-table">
+  <thead>
+    <tr>
+      <% if @show_star_column %>
+      <th scope="col" class="course-list-star-column">
+        <span class="screenreader-only"><%= t ('Favorites') %></span>
+      </th>
       <% end %>
-    </tbody>
-  </table>
-<% end %>
-
-<% @show_star_column = false %>
-<% unless @visible_groups.empty? %>
-  <div class="content--hasMarginTop">
-    <h2><%= t('headings.my_groups', %{My Groups}) %></h2>
-  </div>
-  <table id="my_groups_table" class="ic-Table ic-Table--bordered course-list-table">
-    <thead>
-      <tr>
-        <th scope="col" class="course-list-group-column"><%= t ('Group') %></th>
-        <th scope="col" class="course-list-course-title-column course-list-no-left-border"><%= t ('Course') %></th>
-        <th scope="col" class="course-list-term-column course-list-no-left-border"><%= t ('Term') %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @visible_groups.each do |group| %>
-        <% group_name = group.name %>
-        <tr>
-          <td>
+      <th scope="col" class="course-list-course-title-column course-list-no-left-border">
+        <%= course_label %>
+      </th>
+      <th scope="col" class="course-list-nickname-column course-list-no-left-border">
+        <%= t ('Nickname') %>
+      </th>
+      <th scope="col" class="course-list-term-column course-list-no-left-border">
+        <%= t ('Term') %>
+      </th>
+      <th scope="col" class="course-list-enrolled-as-column course-list-no-left-border">
+        <%= t ('Enrolled as') %>
+      </th>
+      <th scope="col" class="course-list-published-column course-list-no-left-border">
+        <%= t ('Published') %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% enrollments_for_index(:future).each do |enrollment| %> <%= render :partial =>
+    'shared/current_enrollment', :object => enrollment %> <% end %>
+  </tbody>
+</table>
+<% end %> <% @show_star_column = false %> <% unless @visible_groups.empty? %>
+<div class="content--hasMarginTop">
+  <h2><%= t('headings.my_groups', %{My Groups}) %></h2>
+</div>
+<table id="my_groups_table" class="ic-Table ic-Table--bordered course-list-table">
+  <thead>
+    <tr>
+      <th scope="col" class="course-list-group-column"><%= t ('Group') %></th>
+      <th scope="col" class="course-list-course-title-column course-list-no-left-border">
+        <%= t ('Course') %>
+      </th>
+      <th scope="col" class="course-list-term-column course-list-no-left-border">
+        <%= t ('Term') %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @visible_groups.each do |group| %> <% group_name = group.name %>
+    <tr>
+      <td>
             <a href=<%= group_path(group) %>>
               <span class="name" title="<%= group_name %>">
                 <%= group_name %>
               </span>
             </a>
           </td>
-          <td class="course-list-no-left-border">
-            <span class="name"><%= group.context.name %></span>
-          </td>
-          <td class="course-list-no-left-border">
-            <% if group.context_type == 'Course' && !group.context.enrollment_term.default_term? %>
-              <%= group.context.enrollment_term.name %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+      <td class="course-list-no-left-border">
+        <span class="name"><%= group.context.name %></span>
+      </td>
+      <td class="course-list-no-left-border">
+        <% if group.context_type == 'Course' && !group.context.enrollment_term.default_term? %> <%=
+        group.context.enrollment_term.name %> <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
 <% end %>

@@ -1,15 +1,48 @@
-<button class="navigate_today btn">{{#t "today"}}Today{{/t}}</button>
-<span class="navigation_buttons">
-  <button class="navigate_prev btn">
-    <i class="icon-arrow-left" aria-hidden="true"></i>
-    <span class="screenreader-only">{{#t "previous"}}Previous{{/t}}</span>
-  </button>
-  <button class="navigate_next btn">
-    <i class="icon-arrow-right" aria-hidden="true"></i>
-    <span class="screenreader-only">{{#t "next"}}Next{{/t}}</span>
-  </button>
-</span>
-<h2 class="navigation_title" tabindex="-1"><span role="button" class="navigation_title_text" tabindex="0"></span></h2>
+<style>
+.btn-left{
+  background: #0249B3;
+    border-radius: 4px;
+    color: white;
+
+}
+.navigate_today{
+    background: #0249B3;
+    border-radius: 4px;
+    color: white;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    margin-left: 18px;
+    width: 117px;
+    justify-content: center;
+}
+.navigation_title{
+}
+.btn-active{
+  color: white;
+  background: #0249B3;
+}
+</style>
+
+
+
+
+<div style="padding-left: 12px;display: flex;align-items: center;">
+  <div style="display: flex;flex:0.7">
+    <span class="navigation_buttons">
+      <button class="navigate_prev btn btn-left">
+        <img src="/images/icon_arrow_left.png"/>
+        <span class="screenreader-only">{{#t "previous"}}Previous{{/t}}</span>
+      </button>
+      <button class="navigate_next btn btn-left">
+        <img src="/images/icon_row_right.png"/>
+        <span class="screenreader-only">{{#t "next"}}Next{{/t}}</span>
+      </button>
+    </span>
+    <button class="navigate_today btn">{{#t "today"}}Hôm nay{{/t}}</button>
+  </div>
+  <h2 class="navigation_title" tabindex="-1"><span role="button" class="navigation_title_text" tabindex="0"></span></h2>
+</div>
 <span class="date_field_wrapper">
     <label class="screenreader-only" id="calendar_navigation_date_accessible_label">
       {{#t "enter_navigation_date"}}Enter the date you would like to navigate to.{{/t}}

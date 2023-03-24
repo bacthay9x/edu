@@ -39,7 +39,6 @@ const start = () => {
     el: '#calendar_header',
     calendar2Only: ENV.CALENDAR.CAL2_ONLY,
   })
-
   const calendar = new Calendar(
     '#calendar-app',
     ENV.CALENDAR.CONTEXTS,

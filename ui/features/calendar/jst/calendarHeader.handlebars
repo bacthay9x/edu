@@ -1,3 +1,51 @@
+<style>
+.calendar_header{
+margin-left: 280px;
+margin-right: 20px;
+}
+.sticky-toolbar{
+    width: 100%;
+}
+.header-bar {
+    padding-bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex:1;
+}
+.header-bar-left{
+    flex: 0.66;
+}
+.calendar_navigator{
+    width: 100%;
+}
+.header-bar-right{
+    flex: 0.34;
+}
+.calendar_view_buttons{
+    float: right;
+    margin-right: 20px;
+    display: flex;
+}
+.btn_right{
+    width: 117px;
+    height: 32px;
+    font-size: 13px;
+    background: #0367FC;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.active{
+    background: #0249B3 !important;
+    border-color: white !important;
+}
+</style>
+
+
+
+
 <div class="header-bar-outer-container calendar_header">
     <div class="sticky-toolbar" data-sticky>
         <div class="header-bar flex-container">
@@ -6,29 +54,32 @@
                 <h2 class="appointment_group_title">{{#t "my_appointment_groups"}}My Appointment Groups{{/t}}</h2>
                 <button class="btn scheduler_done_button">{{#t "done_go_back_to_list"}}Done, Go Back To List{{/t}}</button>
             </div>
-
+            
             <div class="header-bar-right header-right-flex">
                 <div class="recommend_agenda screenreader-only">
-                    <button id="use_agenda" class="accessibility-warning">{{#t "links.improved_accessibility_recommend_agenda"}}Warning: For improved accessibility, please use the "Agenda view" Calendar.{{/t}}</button>
+                    <button  id="use_agenda" class="accessibility-warning">{{#t "links.improved_accessibility_recommend_agenda"}}Warning: For improved accessibility, please use the "Agenda view" Calendar.{{/t}}</button>
                 </div>
                 <span id="refresh_calendar_link" title="{{#t "loading"}}Loading{{/t}}" data-tooltip>
                     <span class="screenreader-only">{{#t "loading"}}Loading{{/t}}</span>
                 </span>
                 <span class="calendar_view_buttons btn-group" role="tablist">
-                    <button type="button" id="week" class="btn calendar-button" role="tab" aria-selected="false" aria-controls="calendar-app" tabindex="-1">
-                        {{#t "links.calendar_week"}}Week{{/t}}
+                    <button  type="button" id="week" class="btn calendar-button btn_right" role="tab" aria-selected="false" aria-controls="calendar-app" tabindex="-1">
+                        {{#t "links.calendar_week"}}Tuần{{/t}}
                     </button>
-                    <button type="button" id="month" class="btn calendar-button" role="tab" aria-selected="false" aria-controls="calendar-app" tabindex="-1">
-                        {{#t "links.calendar_month"}}Month{{/t}}
+                    <button type="button" id="month" class="btn calendar-button btn_right" role="tab" aria-selected="false" aria-controls="calendar-app" tabindex="-1">
+                        {{#t "links.calendar_month"}}Tháng{{/t}}
                     </button>
-                    <button type="button" id="agenda" class="btn" role="tab" aria-selected="false" aria-controls="calendar-app" tabindex="-1">
+                    <button type="button" id="agenda" class="btn btn_right" role="tab" aria-selected="false" aria-controls="calendar-app" tabindex="-1">
                         {{#t "links.calendar_agenda"}}Agenda{{/t}}
                     </button>
                   </span>
-                <a href="#" id="create_new_event_link" class="btn" title="{{#t "create_event"}}Create New Event{{/t}}" data-tooltip role="button">
-                    <i class="icon-plus"></i>
-                    <span class="screenreader-only">{{#t "create_event"}}Create New Event{{/t}}</span>
-                </a>
+                {{!-- 
+                    <a href="#" id="create_new_event_link" class="btn" title="{{#t "create_event"}}Create New Event{{/t}}" data-tooltip role="button">
+                        <i class="icon-plus"></i>
+                        <span class="screenreader-only">{{#t "create_event"}}Create New Event{{/t}}</span>
+                    </a> 
+                --}}
+                
             </div>
         </div>
     </div>

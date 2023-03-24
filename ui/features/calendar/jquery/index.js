@@ -87,7 +87,6 @@ export default class Calendar {
       this.schedulerState = this.schedulerStore.getState()
       this.schedulerStore.subscribe(this.onSchedulerStateChange)
     }
-
     this.el = $(selector).html(calendarAppTemplate())
 
     // In theory this is no longer necessary, but it performs some function that
@@ -104,6 +103,8 @@ export default class Calendar {
       contextObjects: this.contexts,
     })
 
+  
+
     const fullCalendarParams = this.initializeFullCalendarParams()
 
     const data = this.dataFromDocumentHash()
@@ -113,6 +114,7 @@ export default class Calendar {
     }
 
     fullCalendarParams.defaultDate = this.getCurrentDate()
+
 
     this.calendar = this.el.find('div.calendar').fullCalendar(fullCalendarParams)
 

@@ -16,6 +16,14 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 %>
 
+<style>
+.course_id{
+  background: rgba(235, 246, 255, 0.5) !important;
+}
+</style>
+
+
+
 <% dashboard ||= false %>
 <% is_current_term ||= false %>
 <% # only show updated css in unpublished, current enrollments with FF enabled %>
@@ -23,7 +31,7 @@
   (current_enrollment.course.created? || current_enrollment.course.claimed?) && is_current_term
 %>
 <% unless dashboard %>
-  <tr class="course-list-table-row <%='course-list-unpublished-course-row' if unpublished_course_redesign %>">
+  <tr class="course-list-table-row <%='course_id' if current_enrollment.course_id % 2 == 1  %> <%='course-list-unpublished-course-row' if unpublished_course_redesign %>">
 <% end %>
 <% if current_enrollment.workflow_state == "invited" && !current_enrollment.inactive? %>
   <div class="<%= dashboard ? 'communication_message dashboard_notification alert alert-info' : 'reminder' %>">
@@ -63,6 +71,10 @@
         <% end %>
       </td>
       <% end %>
+
+      <td class="course-list-no-left-border course-list-nickname-column">
+        <%= current_enrollment.course_id %>
+      </td>
 
       <% course_color = @current_user.custom_colors["course_#{current_enrollment.course_id}"] %>
       <td class="course-list-course-title-column

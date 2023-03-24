@@ -16,6 +16,11 @@
   # with this program. If not, see <http://www.gnu.org/licenses/>.
 %>
 
+
+<style>
+#course_home_content{
+}
+</style>
 <% provide :page_title, @context.nickname_for(@current_user) %>
 
 <% unless @context.elementary_subject_course? %>
@@ -58,6 +63,7 @@
   <% js_bundle :announcements_on_home_page %>
 <% end %>
 <div id="course_home_content">
+  
   <% if @course_home_view == 'wiki' %>
     <div id="wiki_page_show"></div>
   <% elsif @course_home_view == 'modules' %>

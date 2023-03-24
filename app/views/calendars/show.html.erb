@@ -6,7 +6,7 @@
 # Canvas is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Affero General Public License as published by the Free
 # Software Foundation, version 3 of the License.
-#
+#l
 # Canvas is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
@@ -15,6 +15,52 @@
 # You should have received a copy of the GNU Affero General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 %>
+
+<style>
+.hidden-phone{
+  flex:0.33;
+  margin-right:100px;
+  
+}
+.minical .fc-scroller{
+  height:300px !important;
+}
+#minical .fc-widget-content div {
+  min-height: 30px !important;
+}
+#calendar-list-holder ul:last-of-type, #other-calendars-list-holder ul:last-of-type, #undated-events ul:last-of-type{
+  flex-wrap: wrap;
+  display: flex;
+  width:100%;
+  margin-top:10px;
+}
+#calendars-context-list .context-list-toggle-box, #other-calendars-context-list .context-list-toggle-box{
+    width: 40px;
+    height: 40px;
+}
+#calendars-context-list .context_list_context, #other-calendars-context-list .context_list_context{
+  display:flex;
+  width: 40%;
+  margin: 0px 20px 20px 20px;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1.5px solid #E2E8F0;
+  padding-bottom: 10px;
+}
+#calendars-context-list .checked label{
+  flex: 1;
+  margin-bottom: 0;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+}
+#calendars-context-list .context-list-toggle-box{
+  margin: auto;
+  margin-right: 20px;
+}
+</style>
 
 <%
   provide :page_title, "Calendar"
@@ -43,14 +89,14 @@
 
 <% provide :right_side do %>
   <div class="rs-section hidden-phone">
-    <div id="minical"></div>
+    <div id="minical" class="minical" style="border: 0.5px solid #0249B3; padding:20px;border-radius: 10px;"></div>
   </div>
   <div id="select-course-component" class="rs-section"></div>
-  <div class="rs-section">
+  <div class="rs-section" style="flex:0.67;border: 0.5px solid #0249B3; padding:20px;border-radius: 10px;margin-bottom: 35px;">
     <h2 tabindex="-1">
       <span role="button" id="calendar-toggle-button"   class="element_toggler" aria-controls="calendar-list-holder"   aria-expanded="true"
           aria-label="<%= t("Calendars toggle list visibility") %>" tabindex="0">
-          <i class="icon-mini-arrow-down auto_rotate"></i> <%= t(:calendars, "Calendars") %>
+          <i class="icon-mini-arrow-down auto_rotate"></i> <%= t(:calendars, "Bảng màu lịch khóa học") %>
       </span>
     </h2>
     <div id="calendar-list-holder"></div>
@@ -73,6 +119,7 @@
       <div id="other-calendars-list-holder" class="editable-list-holder"></div>
     </div>
   <% end %>
+  <!-- 
   <div class="rs-section" id="undated-events-section">
     <h2 tabindex="-1">
       <span href="#" role="button" id="undated-events-button" class="element_toggler" aria-controls="undated-events" aria-expanded="false"
@@ -87,6 +134,8 @@
       <i class="icon-calendar-days"></i> <%= t :calendar_feed, "Calendar Feed" %>
     </button>
   </div>
+  -->
+  
 <% end %>
 <div style="display: none" id="calendar_feed_box" title="<%= t('feed_dialog_title', 'Calendar Feed') %>">
   <p id="calendar-feed-message">
@@ -100,5 +149,5 @@
 </div>
 
 <div id="calendar_header"></div>
-<div id="calendar-app" role="tabpanel" class="<%= 'inline-calendar-event-titles' %>"></div>
+<div id="calendar-app" role="tabpanel" class="<%= 'inline-calendar-event-titles' %>" style="margin-left: 299px;background: white;border: 1px solid #E3E3E3;margin-top: 20px; margin-right: 21px;border-top:none;"></div>
 <div id="calendar-drag-and-drop-container"></div>

@@ -22,20 +22,32 @@ import htmlEscape from 'html-escape'
 // set up a custom view for the agendaWeek day/date header row
 const _originalHeadCellHtml = fullCalendar.Grid.prototype.headCellHtml
 
+
 // duplicate var from vender fullcalendar.js so can access here
 const dayIDs = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+
+
+const vnDay = ['Chủ nhật', 'Thứ 2', 'Thứ 3','Thứ 4', 'Thứ 5' ,'Thứ 6', 'Thứ 7']
 
 fullCalendar.Grid.prototype.headCellHtml = function (cell) {
   if (this.view.name === 'agendaWeek') {
     const date = cell.start
     return `
-  			<th class="fc-day-header ${htmlEscape(this.view.widgetHeaderClass)} fc-${htmlEscape(
-      dayIDs[date.day()]
+  			<th class="fc-day-header ${htmlEscape(this.view.widgetHeaderClass)} fc-${htmlEscape(vnDay[date.day()]
     )}">
         	<div class="fc-day-header__week-number">${htmlEscape(date.format('D'))}</div>
-        	<div class="fc-day-header__week-day">${htmlEscape(date.format('ddd'))}</div>
+        	<div class="fc-day-header__week-day">${htmlEscape(vnDay[date.day()])} </div>
+
         </th>`
   } else {
-    return _originalHeadCellHtml.apply(this, arguments)
+    const date = cell.start 
+    console.log("aaa",date.day());
+
+    return `
+  			<th class="fc-day-header ${htmlEscape(this.view.widgetHeaderClass)} fc-${htmlEscape(vnDay[date.day()]
+    )}">
+        	<div class="fc-day-header__week-day">${htmlEscape(vnDay[date.day()])} </div>
+        </th>`
   }
 }
+

@@ -86,7 +86,8 @@ if k5_user?
   <% if k5_user? %>
     <div id="dashboard-app-container"></div>
   <% else %>
-    <div id="dashboard_header_container" class="ic-Dashboard-header">
+    
+    <div id="dashboard_header_container" class="ic-Dashboard-header" style="display:none;">
       <h1 class="ic-Dashboard-header__title hidden-phone">
         <%= dashboard_title %>
       </h1>

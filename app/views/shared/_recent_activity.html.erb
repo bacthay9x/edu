@@ -16,13 +16,30 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<h2 class="recent-activity-header">
-  <% if @context.nil? || @context.is_a?(User) %>
-    <%= t :recent_activity, "Recent Activity" %>
-  <% else %>
-    <%= t :recent_activity_in_course, "Recent Activity in %{course_or_group}", :course_or_group => @context.nickname_for(@current_user, :short_name) %>
-  <% end %>
-</h2>
+
+<style>
+.recent-activity-header{
+  border-bottom : none;
+  height:80px;
+  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 45px;
+}
+</style>
+<div style="margin-bottom: 80px;padding-left: 54px;padding-right: 54px;height: 162px;background: radial-gradient(36.28% 150.93% at 50% 50%, #3B8AFF 0%, #0048B3 100%);border-radius: 0px 0px 16px 16px;">
+  <div style="height: 120px;"></div>
+  <div style="background: #FFFFFF;border-radius: 8px;">
+    <h2 class="recent-activity-header">
+      <% if @context.nil? || @context.is_a?(User) %>
+      <%= t :recent_activity, "Giới thiệu khóa học " %>
+      <% else %>
+      <%= t :recent_activity_in_course, "Giới thiệu khóa học  %{course_or_group}", :course_or_group => @context.nickname_for(@current_user, :short_name) %>
+      <% end %>
+    </h2>
+  </div>
+
+</div>
 
 <ul class="recent_activity unstyled_list">
 <% categorized_items =
